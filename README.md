@@ -50,7 +50,7 @@ python setup.py develop --no-deps
 5) Download our deep learning models
 
 ```
-deepemhancer --donwload
+deepemhancer --download
 
 ```
 
