@@ -23,7 +23,7 @@ To get a complete description of usage, execute
 The best option to keep you updated. <br>
 Requires anaconda/miniconda and makes use of Nvidia GPU.
 Anaconda/miniconda can be obtained from <ref>https://www.anaconda.com/products/individual</ref>
-<br>Steps:
+<br><br>Steps:
 1) Clone this repository and cd inside
 
 ```
