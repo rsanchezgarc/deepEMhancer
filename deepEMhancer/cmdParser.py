@@ -79,11 +79,11 @@ deepemhancer -p highRes -i path/to/inputVol.mrc -o  path/to/outputVol.mrc --nois
             progressBar.refresh()
       progressBar.close()
 
-      print("Total size downloaded: %d"%totalSize)
+      print("Total size downloaded: %d.\nUnzipping..."%totalSize)
 
       with ZipFile(downloadPath+".zip") as zfile:
         zfile.extractall(downloadPath)
-      print("DOWNLOADED!!")
+      print("DONE!!")
       tryToRemove(downloadPath+".zip")
       parser.exit()
 

@@ -73,19 +73,19 @@ Coming soon!
 ### Examples
 
 
-- Donwload deep learning model
+- Donwload deep learning models
 ```
 deepemhancer --download
 ```
 
-- Post-process input volume path/to/inputVol.mrc and save it at path/to/outputVol.mrc
+- Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using default  deep model (tightTarget)
 ```
 deepemhancer  -i path/to/inputVol.mrc -o  path/to/outputVol.mrc
 ```
 
-- Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using default  deep model tightTarget
+- Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using softer deep model ()wideTarget)
 ```
-deepemhancer  -i path/to/inputVol.mrc -o  path/to/outputVol.mrc
+deepemhancer -p wideTarget -i path/to/inputVol.mrc -o  path/to/outputVol.mrc
 ```
 
 - Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using high resolution deep model
@@ -93,13 +93,13 @@ deepemhancer  -i path/to/inputVol.mrc -o  path/to/outputVol.mrc
 deepemhancer -p highRes -i path/to/inputVol.mrc -o  path/to/outputVol.mrc
 ```
 
-- Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using a deep learning model located in path/to/deep/learningModel
+- Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using high resolution deep learning model located in path/to/deep/learningModel
 ```
-deepemhancer -c path/to/deep/learningModel -i path/to/inputVol.mrc -o  path/to/outputVol.mrc
+deepemhancer p highRes  --deepLearningModelDir path/to/deep/learningModel -i path/to/inputVol.mrc -o  path/to/outputVol.mrc
 ```
 
 - Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using high resolution  deep model and providing normalization information (mean
     and standard deviation of the noise)
 ```    
-deepemhancer -p highRes -i path/to/inputVol.mrc -o  path/to/outputVol.mrc --noise_stats 0.12 0.03
+deepemhancer -p highRes -i path/to/inputVol.mrc -o  path/to/outputVol.mrc --noiseStats 0.12 0.03
 ```
