@@ -10,19 +10,19 @@ def readme():
 
 
 if "gpu" in sys.argv:
-  tfTarget='-gpu==1.14'
+  tfTarget='-gpu==1.14.*'
 else:
-  tfTarget='==1.14'
+  tfTarget='==1.14.*'
 
 install_requires = [
-  'scikit-image==0.15',
+  'scikit-image==0.15.*',
   'scipy==1.3.1',
-  'joblib==0.13',
+  'joblib==0.13.*',
   'tensorflow%s'%tfTarget,
-  'keras==2.2',
-  'pandas==0.25',
+  'keras==2.2.*',
+  'pandas==0.25.*',
   'mrcfile==1.1.2',
-  'requests==2.22',
+  'requests==2.22.*',
 ]
 
 dependency_links=['https://github.com/keras-team/keras-contrib/tarball/master#egg=3fc5ef709e061416f4bc8a92ca3750c824b5d2b0']
