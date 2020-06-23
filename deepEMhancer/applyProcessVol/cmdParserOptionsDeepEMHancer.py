@@ -31,7 +31,7 @@ processVolOptions= [
       "type": float,
       "required": False,
       "default": None,
-      "help": "(Optional) sampling rate of the input map. If not provided, the sampling rate will be read from mrc file header"}),
+      "help": "(Optional) sampling rate (A/voxel) of the input map. If not provided, the sampling rate will be read from mrc file header"}),
 
 
      ("parser_group", "Normalization options (auto normalization if non provided)"),
@@ -65,7 +65,7 @@ processVolOptions= [
        "type": float,
        "default": -1,
        "required": False,
-       "help": "Post-processing step to remove small connected components (Hide dust). Max relative size of connected components to remove 0<s<1 or -1 to deactivate. Default: %(default)s"
+       "help": "Post-processing step to remove small connected components (hide dust). Max relative size of connected components to remove 0<s<1 or -1 to deactivate. Default: %(default)s"
      }),
 
 
@@ -85,7 +85,7 @@ processVolOptions= [
        "nargs": None,
        "required": False,
        "default": None,
-       "help": "Number of cubes to process simultaneously. Lower it if CUDA Out Of Memory error happens"
+       "help": "Number of cubes to process simultaneously. Lower it if CUDA Out Of Memory error happens and increase it if low GPU performance observed"
      }),
 
 

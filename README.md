@@ -21,7 +21,7 @@ To get a complete description of usage, execute
 
 ### Install from source option:
 The best option to keep you updated. <br>
-Requires anaconda/miniconda and makes use of Nvidia GPU.
+Requires anaconda/miniconda and makes use of Nvidia GPU(s).
 Anaconda/miniconda can be obtained from <ref>https://www.anaconda.com/products/individual</ref>
 <br><br>Steps:
 1) Clone this repository and cd inside
@@ -73,12 +73,33 @@ Coming soon!
 ### Examples
 
 
-#### Donwload deep learning model
+- Donwload deep learning model
 ```
 deepemhancer --download
 ```
 
-#### Post-process input volume path/to/inputVol.mrc and save it at path/to/outputVol.mrc
+- Post-process input volume path/to/inputVol.mrc and save it at path/to/outputVol.mrc
 ```
 deepemhancer  -i path/to/inputVol.mrc -o  path/to/outputVol.mrc
+```
+
+- Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using default  deep model tightTarget
+```
+deepemhancer  -i path/to/inputVol.mrc -o  path/to/outputVol.mrc
+```
+
+- Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using high resolution deep model
+```
+deepemhancer -p highRes -i path/to/inputVol.mrc -o  path/to/outputVol.mrc
+```
+
+- Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using a deep learning model located in path/to/deep/learningModel
+```
+deepemhancer -c path/to/deep/learningModel -i path/to/inputVol.mrc -o  path/to/outputVol.mrc
+```
+
+- Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using high resolution  deep model and providing normalization information (mean
+    and standard deviation of the noise)
+```    
+deepemhancer -p highRes -i path/to/inputVol.mrc -o  path/to/outputVol.mrc --noise_stats 0.12 0.03
 ```

@@ -14,16 +14,16 @@ def parseArgs():
   + Download deep learning models
 deepemhancer --download
 
-  + Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using default model tightTarget
+  + Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using default  deep model tightTarget
 deepemhancer  -i path/to/inputVol.mrc -o  path/to/outputVol.mrc
 
-  + Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using high resolution model
+  + Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using high resolution deep model
 deepemhancer -p highRes -i path/to/inputVol.mrc -o  path/to/outputVol.mrc
 
   + Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using a deep learning model located in path/to/deep/learningModel
 deepemhancer -c path/to/deep/learningModel -i path/to/inputVol.mrc -o  path/to/outputVol.mrc
 
-  + Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using high resolution model and providing normalization information (mean
+  + Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using high resolution  deep model and providing normalization information (mean
     and standard deviation of the noise)
 deepemhancer -p highRes -i path/to/inputVol.mrc -o  path/to/outputVol.mrc --noise_stats 0.12 0.03
 '''
