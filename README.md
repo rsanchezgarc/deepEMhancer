@@ -63,10 +63,10 @@ deepemhancer -h
 
 ### Anaconda cloud:
 
-1) Create a conda environment with the required dependencies
+1) Create a fresh conda environment
 
 ```
-conda env create -f deepEMhancer_env.yml  -n deepEMhancer_env
+conda create -n deepEMhancer_env python=3.6
 ```
 2) Activate the environment. You always need to activate the environment before executing deepEMhancer
 
