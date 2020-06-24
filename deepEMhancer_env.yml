@@ -17,7 +17,7 @@ dependencies:
   - tqdm=4.42
   - pip=19.2.2
   - pip:
-    - git+https://www.github.com/keras-team/keras-contrib.git
+    - git+https://www.github.com/keras-team/keras-contrib.git@3fc5ef709e061416f4bc8a92ca3750c824b5d2b0
     - mrcfile==1.1.2
     - keras-radam==0.12
 

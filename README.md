@@ -29,7 +29,6 @@ Anaconda/miniconda can be obtained from <ref>https://www.anaconda.com/products/i
 ```
 git clone https://github.com/rsanchezgarc/deepEMhancer
 cd deepEMhancer
-
 ```
 2) Create a conda environment with the required dependencies
 
@@ -51,14 +50,50 @@ python -m pip install . --no-deps
 
 ```
 deepemhancer --download
-
 ```
 
 6) Ready! Do not forget to activate the environment for future usages. For a complete help use:
 
 ```
 deepemhancer -h
+```
 
+7) Optionally, you can remove the folder, since deepemhancer will be available anywhere once you activate the environment
+
+
+### Install from PyPI.
+Simple but does not work with GPU, which makes the program quite slow
+<br><br>Steps:
+
+1) Optional but recommended. Create a fresh environment (e.g conda environment)
+
+```
+conda create -n deepEMhancer_env python=3.6
+```
+
+2) If using environments:<br>
+Activate the environment. You always need to activate the environment before executing deepEMhancer if it was installed in an environment
+
+```
+conda activate deepEMhancer_env
+```
+
+4) Install deepEMhancer
+
+```
+python -m pip install deepEMhancer
+```
+
+5) Download our deep learning models
+
+```
+deepemhancer --download
+```
+
+6) Ready! Do not forget to activate the environment for future usages. For a complete help use:
+
+```
+deepemhancer -h
 ```
 
 7) Optionally, you can remove the folder, since deepemhancer will be available anywhere once you activate the environment
@@ -66,8 +101,6 @@ deepemhancer -h
 
 ### Anaconda cloud:
 Coming soon!
-
-
 
 
 ## Examples
@@ -95,7 +128,7 @@ deepemhancer -p highRes -i path/to/inputVol.mrc -o  path/to/outputVol.mrc
 
 - Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using high resolution deep learning model located in path/to/deep/learningModel
 ```
-deepemhancer p highRes  --deepLearningModelDir path/to/deep/learningModel -i path/to/inputVol.mrc -o  path/to/outputVol.mrc
+deepemhancer -p highRes  --deepLearningModelDir path/to/deep/learningModel -i path/to/inputVol.mrc -o  path/to/outputVol.mrc
 ```
 
 - Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using high resolution  deep model and providing normalization information (mean
