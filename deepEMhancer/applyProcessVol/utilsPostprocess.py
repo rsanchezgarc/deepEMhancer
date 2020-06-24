@@ -1,10 +1,7 @@
-from collections import defaultdict
 
-import numba
 import numpy as np
 from skimage.filters import threshold_otsu
 from skimage.measure import label as label_components
-from tqdm import tqdm
 
 from ..utils.dataUtils import getCoordsWithinSphere, getCoordsOutsideSphere, morphDilation, morphErosion
 
@@ -46,7 +43,6 @@ def removeSmallCCs(img, estimated_background_thr=None, min_size_to_preserve=0.1,
   print("!")
   return final_img
 
-@numba.jit(nopython=True, cache=True, parallel=True)
 def getLabels2NumVoxels(labels, n_labels):
   label2Size= np.zeros(n_labels+1, dtype=np.int64)
   flattenLabels= labels.flatten()
@@ -65,6 +61,12 @@ def estimateBackground(img):
   thr_select= .5*(notBackground+otsu_thr)
   return background, thr_select
 
+
+try:
+  import numba
+  getLabels2NumVoxels= numba.jit(getLabels2NumVoxels, nopython=True, cache=True, parallel=True)
+except ImportError:
+  pass
 
 
 def test():
