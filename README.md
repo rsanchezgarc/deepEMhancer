@@ -44,7 +44,7 @@ conda activate deepEMhancer_env
 4) Install deepEMhancer
 
 ```
-python setup.py develop --no-deps
+python -m pip install . --no-deps
 ```
 
 5) Download our deep learning models
