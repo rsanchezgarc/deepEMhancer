@@ -3,14 +3,14 @@ import os
 import setuptools
 from setuptools import setup
 
-VERSION="0.13"
+VERSION="0.01"
 
 def readme():
   readmePath = os.path.abspath(os.path.join(__file__, "..", "README.md"))
   with open(readmePath) as f:
     return f.read()
 
-installTfGpu = os.environ.get("DEEP_EM_HANCER_INSTALL_GPU", None)
+installTfGpu = os.environ.get("DEEPEMHANCER_INSTALL_GPU", None)
 if installTfGpu:
   tfTarget='-gpu==1.14.*'
 else:

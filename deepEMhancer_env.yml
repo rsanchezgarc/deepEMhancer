@@ -1,6 +1,6 @@
 channels:
   - anaconda
-  - conda-forge
+  - condaDeepEMHancer-forge
   - defaults
 dependencies:
   - h5py=2.9

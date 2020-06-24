@@ -61,18 +61,14 @@ deepemhancer -h
 7) Optionally, you can remove the folder, since deepemhancer will be available anywhere once you activate the environment
 
 
-### Install from PyPI.
-Simple but does not work with GPU, which makes the program quite slow
-<br><br>Steps:
+### Anaconda cloud:
 
-1) Optional but recommended. Create a fresh environment (e.g conda environment)
+1) Create a conda environment with the required dependencies
 
 ```
-conda create -n deepEMhancer_env python=3.6
+conda env create -f deepEMhancer_env.yml  -n deepEMhancer_env
 ```
-
-2) If using environments:<br>
-Activate the environment. You always need to activate the environment before executing deepEMhancer if it was installed in an environment
+2) Activate the environment. You always need to activate the environment before executing deepEMhancer
 
 ```
 conda activate deepEMhancer_env
@@ -81,7 +77,7 @@ conda activate deepEMhancer_env
 4) Install deepEMhancer
 
 ```
-python -m pip install deepEMhancer
+conda install deepEMhancer -c rsanchez1369 -c ananconda -c conda-forge
 ```
 
 5) Download our deep learning models
@@ -99,7 +95,6 @@ deepemhancer -h
 7) Optionally, you can remove the folder, since deepemhancer will be available anywhere once you activate the environment
 
 
-### Anaconda cloud:
 Coming soon!
 
 
