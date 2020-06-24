@@ -1,7 +1,9 @@
 import sys, os
+
+import setuptools
 from setuptools import setup
 
-VERSION="0.01"
+VERSION="0.1"
 
 def readme():
   readmePath = os.path.abspath(os.path.join(__file__, "..", "README.md"))
@@ -23,25 +25,29 @@ install_requires = [
   'pandas==0.25.*',
   'mrcfile==1.1.2',
   'requests==2.22.*',
+  'tqdm==4.42'
+
 ]
 
 dependency_links=['https://github.com/keras-team/keras-contrib/tarball/master#egg=3fc5ef709e061416f4bc8a92ca3750c824b5d2b0']
 
-setup(name='deep_em_vol_postprocesser',
+setup(name='deepEMhancer',
       version=VERSION,
-      description='Deep learning for cryo-EM volume postprocessing',
+      description='Deep learning for cryo-EM maps post-processing',
       long_description=readme(),
       long_description_content_type="text/markdown",
       keywords='cryo-EM deep learning',
-      url='https://github.com/rsanchezgarc/deep_vol_processer_em',
+      url='https://github.com/rsanchezgarc/deepEMhancer',
       author='Ruben Sanchez-Garcia',
       author_email='rsanchez@cnb.csic.es',
       license='Apache 2.0',
-      packages=['deepEMhancer'],
+      #packages=['deepEMhancer'],
+      packages=setuptools.find_packages(),
       install_requires=install_requires,
       dependency_links=dependency_links,
       entry_points={
-        'console_scripts': ['deepemhancer=deepEMhancer.deepEMhancer:commanLineFun'],
+        #'console_scripts': ['deepemhancer=deepEMhancer.deepEMhancer:commanLineFun'],
+        'console_scripts': ['deepemhancer=deepEMhancer.exeDeepEMhancer:commanLineFun'],
       },
       include_package_data=True,
       zip_safe=False)

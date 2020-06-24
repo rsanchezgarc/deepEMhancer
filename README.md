@@ -70,7 +70,7 @@ Coming soon!
 
 
 
-### Examples
+## Examples
 
 
 - Donwload deep learning models
@@ -83,7 +83,7 @@ deepemhancer --download
 deepemhancer  -i path/to/inputVol.mrc -o  path/to/outputVol.mrc
 ```
 
-- Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using softer deep model ()wideTarget)
+- Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using softer deep model (wideTarget)
 ```
 deepemhancer -p wideTarget -i path/to/inputVol.mrc -o  path/to/outputVol.mrc
 ```
