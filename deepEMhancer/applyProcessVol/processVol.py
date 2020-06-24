@@ -11,11 +11,11 @@ from ..utils.loadModel import load_model, getInputCubeSize, loadNormalizationFun
 from .utilsPostprocess import removeSmallCCs, morphologicalDilation
 
 class AutoProcessVol(object):
-  def __init__(self, model_fname, gpuIds="0", batch_size=2*BATCH_SIZE):
+  def __init__(self, model_fname, gpuIds="0", batch_size=BATCH_SIZE):
     '''
 
     :param model_fname: the filename where the keras model is saved
-    :param gpuIds: the gpu id(s) to use
+    :param gpuIds: the gpu id(s) to use. Comma separated string. Use -1 for cpu only
     :param batch_size:
     '''
     if isinstance(gpuIds, str):
