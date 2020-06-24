@@ -77,7 +77,7 @@ conda activate deepEMhancer_env
 4) Install deepEMhancer
 
 ```
-conda install deepEMhancer -c rsanchez1369 -c ananconda -c conda-forge
+conda install deepEMhancer -c rsanchez1369 -c anaconda -c conda-forge
 ```
 
 5) Download our deep learning models
@@ -91,12 +91,6 @@ deepemhancer --download
 ```
 deepemhancer -h
 ```
-
-7) Optionally, you can remove the folder, since deepemhancer will be available anywhere once you activate the environment
-
-
-Coming soon!
-
 
 ## Examples
 

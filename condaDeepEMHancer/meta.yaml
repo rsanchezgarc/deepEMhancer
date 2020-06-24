@@ -1,5 +1,5 @@
 {% set name = "deepEMhancer" %}
-{% set version = "0.12" %}
+{% set version = "0.01" %}
 
 package:
   name: "{{ name|lower }}"
@@ -17,8 +17,8 @@ build:
 
 requirements:
   build:
-    - setuptools
     - numpy ==1.16.*
+    - setuptools
     - joblib ==0.13.*
     - keras ==2.2.*
     - mrcfile ==1.1.2
@@ -31,8 +31,8 @@ requirements:
     - tensorflow-gpu ==1.14.*
     - tqdm ==4.42
   run:
-    - joblib ==0.13.*
     - numpy ==1.16.*
+    - joblib ==0.13.*
     - joblib ==0.13.*
     - keras ==2.2.*
     - mrcfile ==1.1.2
@@ -52,6 +52,7 @@ test:
     - deepEMhancer.utils
   commands:
     - deepemhancer --help
+    - python -c "import keras; import keras_contrib"
 
 about:
   home: "https://github.com/rsanchezgarc/deepEMhancer"

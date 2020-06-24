@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 anaconda_path=`which python | rev | cut -f 3- -d"/" | rev` &&
-rm $anaconda_path/conda-bld/linux-64/deepEMhancer-*.bz2
+rm $anaconda_path/conda-bld/linux-64/*
 
 conda-build . -c anaconda -c conda-forge --python=3.6 # &&
 
