@@ -12,7 +12,7 @@ DEFAULT_MODEL_DIR = os.path.expanduser("~/.local/share/deepEMhancerModels/produc
 
 
 NNET_NJOBs= 8
-BATCH_SIZE=6
+BATCH_SIZE=8
 
 MAX_VAL_AFTER_NORMALIZATION=200
 
