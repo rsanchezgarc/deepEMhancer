@@ -183,7 +183,7 @@ class AutoProcessVol(object):
       if n_cubes==self.batch_size:
         batch_x= np.stack(batch_x)
         coords_list= np.array(coords_list)
-        batch_y_pred= self.model.predict(np.expand_dims(batch_x, axis=-1))
+        batch_y_pred= self.model.predict_on_batch(np.expand_dims(batch_x, axis=-1))
 
         self._updateMask(coords_list, batch_y_pred, processVol, weights)
         batch_x, coords_list= [], []
@@ -191,7 +191,7 @@ class AutoProcessVol(object):
     if n_cubes>0:
       batch_x = np.stack(batch_x)[:n_cubes,...]
       coords_list = np.array(coords_list)[:n_cubes,...]
-      batch_y_pred = self.model.predict(np.expand_dims(batch_x, axis=-1))
+      batch_y_pred = self.model.predict_on_batch(np.expand_dims(batch_x, axis=-1))
       self._updateMask(coords_list, batch_y_pred, processVol, weights)
 
     processVol= processVol/weights
