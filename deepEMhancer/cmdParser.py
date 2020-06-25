@@ -29,7 +29,7 @@ deepemhancer -p highRes -i path/to/inputVol.mrc -o  path/to/outputVol.mrc --nois
 '''
 
   parser = argparse.ArgumentParser(
-    description='DeepEMHancer. Deep post-processing of cryo-EM maps', add_help=False,
+    description='DeepEMHancer. Deep post-processing of cryo-EM maps. https://github.com/rsanchezgarc/deepEMhancer', add_help=False,
     epilog=example_text, formatter_class=argparse.RawDescriptionHelpFormatter)
 
   group = parser.add_argument_group("Main arguments")
