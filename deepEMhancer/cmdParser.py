@@ -49,7 +49,6 @@ deepemhancer -p highRes -i path/to/inputVol.mrc -o  path/to/outputVol.mrc --nois
     def __call__(self, parser, namespace, values, option_string=None):
       import requests
       from zipfile import ZipFile
-      from io import BytesIO
 
       if values is None or len(values) == 0:
         downloadPath = os.path.split(DEFAULT_MODEL_DIR)[0]

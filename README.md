@@ -6,15 +6,14 @@ Simply speaking, DeepEMhancer performs a non-linear post-processing of cryo-EM m
 1) Local sharpening-like post-processing
 2) Automatic masking/denoising of cryo-EM maps.
 
+## Table of Contents  
+- [INSTALLATION](#installation)  
+- [EXAMPLES](#examples)  
+
 
 To get a complete description of usage, execute
 
 `deepemhancer -h`
-
-
-##### Example
-
-`deepemhancer  -i path/to/inputVol -o path/to/outputVol`
 
 
 ## INSTALLATION:
