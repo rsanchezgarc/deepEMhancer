@@ -87,22 +87,22 @@ deepemhancer -p highRes -i path/to/inputVol.mrc -o  path/to/outputVol.mrc --nois
       parser.exit()
 
 
-  parser.add_argument('--download', nargs="?", action=_DownloadModel,
+  parser.add_argument('--download', nargs="?", action=_DownloadModel, metavar="DOWNLOAD_DEST",
                       help='download default DeepEMhancer models. ' +
                            'They will be saved at %s if no path provided' % (DEFAULT_MODEL_DIR))
 
   args = vars(parser.parse_args())
-  deepLearningModelDirPath = args["deepLearningModelDir"]
+  deepLearningModelPath = args["deepLearningModelPath"]
 
-  if deepLearningModelDirPath is None:
+  if deepLearningModelPath is None:
     if not os.path.exists(DEFAULT_MODEL_DIR):
       os.makedirs(DEFAULT_MODEL_DIR)
-    deepLearningModelDirPath = DEFAULT_MODEL_DIR
-  args["deepLearningModelDir"] = deepLearningModelDirPath
+    deepLearningModelPath = DEFAULT_MODEL_DIR
+  args["deepLearningModelPath"] = deepLearningModelPath
 
-  if not os.path.isfile( os.path.join(deepLearningModelDirPath, "deepEMhancer_tightTarget.hd5") ):
+  if not os.path.isfile(deepLearningModelPath) and not os.path.isfile( os.path.join(deepLearningModelPath, "deepEMhancer_tightTarget.hd5") ):
     print(("Deep learning models not found at %s. Downloading default models with --download or " +
-           "indicate its location with --deepLearningModelDir.") % DEFAULT_MODEL_DIR)
+           "indicate its location with --deepLearningModelPath.") % DEFAULT_MODEL_DIR)
     sys.exit(1)
 
   if "-1" in args["gpuIds"]:

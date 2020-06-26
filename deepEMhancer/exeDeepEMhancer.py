@@ -11,7 +11,7 @@ from .config import DEFAULT_MODEL_DIR
 
 
 def main(inputMap, outputMap, processingType, halfMap2=None, samplingRate=None, noiseStats=None, binaryMask=None,
-         deepLearningModelDir=None, cleaningStrengh=-1, batch_size=None,  gpuIds="0"):
+         deepLearningModelPath=None, cleaningStrengh=-1, batch_size=None, gpuIds="0"):
   '''
 
   :param inputMap: The path containing an mrc file with the input map or a numpy array. A half map can also be provided
@@ -28,7 +28,7 @@ def main(inputMap, outputMap, processingType, halfMap2=None, samplingRate=None, 
   :param binaryMask: Normalization mode 2: A path to a binaryMask (1 protein, 0 no protein) used to normalize the input. If no normalization mode
                      provided, automatic normalization will be carried out. Supresses --precomputedModel option to use a tailored model.
 
-  :param deepLearningModelDir: The directory where deep learning models are located. If None, they will be loaded from
+  :param deepLearningModelPath: The directory where deep learning models are located or a path to hd5 file containing the model. If None, they will be loaded from
                                 .config.DEFAULT_MODEL_DIR
   :param cleaningStrengh: Post-processing step to remove small connected components (Hide dust). Max relative size of connected components to remove 0<s<1 or -1 to deactivate.
   :param batch_size: Batch size used to feed the GPUs
@@ -44,16 +44,23 @@ def main(inputMap, outputMap, processingType, halfMap2=None, samplingRate=None, 
   assert os.path.isfile(inputMap), "Error: input file %s not found" % inputMap
   assert outputMap.endswith("mrc") or outputMap.endswith("map"), "Error: %s output name is not in mrc format. End it with .mrc" % outputMap
 
-
-  if deepLearningModelDir is None:
+  checkpoint_fname=None
+  if deepLearningModelPath is None:
     deepLearningModelDir= os.path.expanduser(DEFAULT_MODEL_DIR)
-
-  if binaryMask is not None:
-    assert processingType=="tightTarget", "Error, if binary mask provided, only -p tightTarget is allowed"
-    binaryMask= os.path.expanduser(binaryMask)
-    checkpoint_fname= os.path.join(deepLearningModelDir, "deepEMhancer_masked.hd5")
   else:
-    checkpoint_fname= os.path.join(deepLearningModelDir, "deepEMhancer_"+processingType+".hd5")
+    if os.path.isfile(deepLearningModelPath):
+      checkpoint_fname=deepLearningModelPath
+    else:
+      deepLearningModelDir= deepLearningModelPath
+
+  if checkpoint_fname is not None:
+    assert processingType=="tightTarget", "Error, -p option should not be provided if --deepLearningModelPath points to an hd5 file"
+  if binaryMask is not None:
+    assert processingType=="tightTarget", "Error, if binary mask provided, -p option should not be provided "
+    binaryMask= os.path.expanduser(binaryMask)
+    checkpoint_fname= checkpoint_fname if checkpoint_fname is not None else os.path.join(deepLearningModelDir, "deepEMhancer_masked.hd5")
+  else:
+    checkpoint_fname= checkpoint_fname if checkpoint_fname is not None else os.path.join(deepLearningModelDir, "deepEMhancer_" + processingType + ".hd5")
 
   inputVolOrFname, boxSize = resolveHalfMapsOrInputMap(inputMap, halfMap2)
 

@@ -54,11 +54,11 @@ processVolOptions= [
 
      ("parser_group", "Alternative options"),
 
-     ( "--deepLearningModelDir", {
+     ( "--deepLearningModelPath", {
        "type": str,
        "required": False, "nargs": None,
        "default": None, "metavar": "PATH_TO_MODELS_DIR",
-       "help": "(Optional) Directory where a non default deep learning model is located. Supressess --precomputedModel"
+       "help": "(Optional) Directory where a non default deep learning model is located (model is selected using --precomputedModel) or a path to hd5 file containing the model"
      }),
 
 
