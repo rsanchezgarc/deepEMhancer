@@ -243,8 +243,8 @@ def resolveHalfMapsOrInputMap(inputVol, halfMap2):
     inputVolOrFname= inputVol
     boxSize=None
   else:
-    half1Vol, boxSize= loadVolIfFnameOrIgnoreIfMatrix(args.input, normalize=None)
-    half2Vol, __= loadVolIfFnameOrIgnoreIfMatrix(args.halfMap2, normalize=None)
+    half1Vol, boxSize= loadVolIfFnameOrIgnoreIfMatrix(inputVol, normalize=None)
+    half2Vol, __= loadVolIfFnameOrIgnoreIfMatrix(halfMap2, normalize=None)
     inputVolOrFname= 0.5*(half1Vol+half2Vol)
   return inputVolOrFname, boxSize
 
