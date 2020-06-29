@@ -80,7 +80,7 @@ we recommend to employ the highRes model for maps with overall resolution better
 resolution regions. If the overall resolution is worse, or the number of low resolution regions is high, the tightTarget
 model should do a good job. For cases in which both tightTarget and highRes produce too tightly masked solutions, possibly removing
 some parts of the protein as if they were noise, we recommend to employ the wideTarget model.
-##### About the normaliztion
+##### About the normalization
 One of the key aspects to succesfully employ DeepEMhancer is the normalization of the input volumes.
 The default normalization mode, mode 1, normalizes the data such that the statistics of the noise regions
 are forced to adopt a mean value of 0 and a standard deviation of 0.1.<br>
