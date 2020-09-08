@@ -1,4 +1,4 @@
-
+from ..config import BATCH_SIZE
 processVolOptions= [
 
   ("parser_group", "Main options"),
@@ -7,7 +7,8 @@ processVolOptions= [
       "type": str,
       "nargs": None,
       "required": True,
-      "help": "Input map to process or half map number 1. This map should be unmasked and not sharpened (Do not use post-processed maps, only maps directly obtained from refinement)"}),
+      "help": "Input map to process or half map number 1. This map should be unmasked and not sharpened (Do not use post-processed maps, only maps directly obtained from refinement)"+
+              ". If half map 1 provided, do not forget to use the half map 2 using -i2"}),
 
     ("-o", "--outputMap", {
       "type": str,
@@ -85,8 +86,8 @@ processVolOptions= [
        "type": int,
        "nargs": None,
        "required": False,
-       "default": None,
-       "help": "Number of cubes to process simultaneously. Lower it if CUDA Out Of Memory error happens and increase it if low GPU performance observed"
+       "default": BATCH_SIZE,
+       "help": "Number of cubes to process simultaneously. Lower it if CUDA Out Of Memory error happens and increase it if low GPU performance observed. Default %(default)s"
      }),
 
 
