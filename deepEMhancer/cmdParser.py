@@ -25,7 +25,7 @@ deepemhancer -c path/to/deep/learningModel -i path/to/inputVol.mrc -o  path/to/o
 
   + Post-process input map path/to/inputVol.mrc and save it at path/to/outputVol.mrc using high resolution  deep model and providing normalization information (mean
     and standard deviation of the noise)
-deepemhancer -p highRes -i path/to/inputVol.mrc -o  path/to/outputVol.mrc --noise_stats 0.12 0.03
+deepemhancer -p highRes -i path/to/inputVol.mrc -o  path/to/outputVol.mrc --noiseStats 0.12 0.03
 '''
 
   parser = argparse.ArgumentParser(
