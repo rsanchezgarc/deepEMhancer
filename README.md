@@ -18,9 +18,8 @@ To get a complete description of usage, execute
 - [Requirements](#requirements)
 - [Install from source option](#install-from-source-option)
 - [Install from Anaconda cloud](#install-from-anaconda-cloud)
-- [Alternative installation for CUDA 10.0 ](#alternative-installation-for-CUDA-10.0-compatible-systems)
+- [Alternative installation for CUDA 10.0](#alternative-installation-for-CUDA-100-compatible-systems)
 - [No conda installation](#no-conda-installation)
-
 #### Requirements
 DeepEMhancer has been tested on Linux systems.
 It employs Tensorflow version 1.14 that requires CUDA 10. Our installation recipe will
