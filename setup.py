@@ -7,8 +7,15 @@ VERSION="0.13"
 
 def readme():
   readmePath = os.path.abspath(os.path.join(__file__, "..", "README.md"))
-  with open(readmePath) as f:
-    return f.read()
+  try:
+    with open(readmePath) as f:
+      return f.read()
+  except UnicodeDecodeError:
+    try:
+      with open(readmePath, 'r', encoding='utf-8').read() as f:
+        return f.read()
+    except Exception as e:
+      return "Description not available due to unexpected error: "+str(e)
 
 installTfGpu = os.environ.get("DEEPEMHANCER_INSTALL_GPU", None)
 if installTfGpu:

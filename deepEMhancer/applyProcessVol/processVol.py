@@ -166,7 +166,7 @@ class AutoProcessVol(object):
 
     vol, paddingValues= self._padToDivisibleSize(vol)
 
-    print( "DONE!. Shape at 1 A/voxel after padding-> ", vol.shape)
+    print( "DONE!. Shape at %.2f A/voxel after padding-> "%RESIZE_VOL_TO, vol.shape)
     sys.stdout.flush()
     processVol= np.zeros(vol.shape)
     weights= np.ones(vol.shape)
@@ -329,8 +329,8 @@ if __name__=="__main__":
           "type": int,
           "nargs": None,
           "required": False ,
-          "default": None,
-          "help": "Number of cubes to process simultaneously. Lower it if CUDA out of memory error happens"
+          "default": BATCH_SIZE,
+          "help": "Number of cubes to process simultaneously. Lower it if CUDA out of memory error happens. Default: %(default)s"
         }),
 
    ]
