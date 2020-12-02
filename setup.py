@@ -12,7 +12,7 @@ def readme():
       return f.read()
   except UnicodeDecodeError:
     try:
-      with open(readmePath, 'r', encoding='utf-8').read() as f:
+      with open(readmePath, 'r', encoding='utf-8') as f:
         return f.read()
     except Exception as e:
       return "Description not available due to unexpected error: "+str(e)
