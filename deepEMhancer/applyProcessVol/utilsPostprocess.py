@@ -64,7 +64,7 @@ def estimateBackground(img):
 
 try:
   import numba
-  getLabels2NumVoxels= numba.jit(getLabels2NumVoxels, nopython=True, cache=True, parallel=True)
+  getLabels2NumVoxels= numba.jit(getLabels2NumVoxels, nopython=True, cache=True, parallel=False)
 except ImportError:
   pass
 
