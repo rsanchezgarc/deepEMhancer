@@ -34,7 +34,7 @@ def load_model(checkpoint_fname, custom_objects=None, lastLayerToFreeze=None, re
         break
     assert layerFound is True, "Error, %s not found in the model"%lastLayerToFreeze
 
-  if True or resetWeights:
+  if resetWeights:
     print("Model reset")
     for i, layer in enumerate(model.layers):
       initializers = []
