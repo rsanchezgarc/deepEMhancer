@@ -86,7 +86,6 @@ def retrieveParamsFromHd5(fname, paramsList, codeList):
           codeName=codeName.replace("/*", "")
           for putativeKey in h5File[codeName]:
             codeStr=h5File[codeName+'/'+putativeKey][0]
-            print( codeStr )
             exec(codeStr, env)  # normFun is in the code
             codes[putativeKey] =(env.get(putativeKey))
         else:
