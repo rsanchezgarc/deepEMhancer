@@ -268,7 +268,7 @@ E tensorflow/stream_executor/cuda/cuda_dnn.cc:329] Could not create cudnn handle
 In other cases is related with an incompatibility between CUDA and cudnn versions.<br>
 
 - Solution: 
-  - If it is caused by memory constrains, set dynamic GPU allocation using the environment variable 
+  - If it is caused by memory constraints, set dynamic GPU allocation using the environment variable 
 TF_FORCE_GPU_ALLOW_GROWTH='true'. E.g. 
 ```TF_FORCE_GPU_ALLOW_GROWTH='true' deepemhancer -i ~/tmp/useCase/EMD-0193.mrc -o ~/tmp/outVolDeepEMhancer/out.mrc```
 
