@@ -275,3 +275,12 @@ TF_FORCE_GPU_ALLOW_GROWTH='true'. E.g.
   - If it is caused by incompatibility between CUDA and cudnn, you should try to reinstall it ensuring that
     CUDA and cudnn versions match and they are compatible with the Tensorflow version. We are using Tensorflow
     version 14, but we think that older versions, compatible with CUDA 9 could also work.
+3. Error:
+```
+F ./tensorflow/core/kernels/conv_2d_gpu.h:935] Non-OK-status: CudaLaunchKernel( SwapDimension1And2InTensor3UsingTiles<T, kNumThreads, kTileSize, kTileSize, conjugate>, total_tiles_count, kNumThreads, 0, d.stream(), input, input_dims, output) status: Internal: invalid configuration argument
+
+Aborted (core dumped)
+``` 
+- Explanation: This is a reported issue for Tensorflow when using multiple GPUS and the number of subcubes or the batch size is not divisible by the number of GPUs
+- Solution: Use only one GPU (`-g 1`) and/or batch size 1 (`-b 1`)
+
