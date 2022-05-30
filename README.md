@@ -1,9 +1,12 @@
 # Deep cryo-EM Map Enhancer (DeepEMhancer)
 **DeepEMhancer** is a python package designed to perform post-processing of
-cryo-EM maps as described in "<a href=https://doi.org/10.1101/2020.06.12.148296 >DeepEMhancer: a deep learning solution for cryo-EM volume post-processing</a>", by Sanchez-Garcia et al, 2020.<br>
+cryo-EM maps as described in "<a href=https://www.nature.com/articles/s42003-021-02399-1 >DeepEMhancer: a deep learning solution for cryo-EM volume post-processing</a>", by Sanchez-Garcia et al, 2021.<br>
+DeepEMhancer is a deep learning model trained on pairs of experimental volumes and atomic model-corrected volumes that is able to obtain post-processed maps using as input raw volumes, preferably half maps. Please notice that post-translational modifications and ligands were not included in the traning set and consequently, results for these features could be inaccurate.<br>
 Simply speaking, DeepEMhancer performs a non-linear post-processing of cryo-EM maps that produces two main effects:
 1) Local sharpening-like post-processing.
 2) Automatic masking/denoising of cryo-EM maps.
+
+
 
 ## Table of Contents  
 - [INSTALLATION](#installation)  
@@ -205,7 +208,7 @@ when it is possible to employ normalization mode 1.
 DeepEMhancer processes input maps by chunking them into smaller cubes that are sent to GPUs. Batch size parameter represent
 the number of smaller cubes that are simultaneously processed by the GPUs. A typical value for an 8 GB GPU could be<br> 
 ```--batch_size 6```. If OUT OF MEMORY error happens, try to lower batch_size, and if low GPU usage is observed (via nvidia-smi), try
-to increase it.
+to increase it. Setting the environmental variable `TF_FORCE_GPU_ALLOW_GROWTH='true'` prior execution could also help to fix some GPU memory errors. When using multiple GPUs, for certain box sizes, there might happen a reported bug affecting the batch_size, please see [TROUBLESHOOTING](#Troubleshooting) error 3.
 
 
 
