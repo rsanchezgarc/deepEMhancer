@@ -1,9 +1,12 @@
+import importlib
 import os
 
 import setuptools
 from setuptools import setup
 
-VERSION="0.13"
+def version():
+    version = importlib.import_module("deepEMhancer").__version__
+    return version
 
 def readme():
   readmePath = os.path.abspath(os.path.join(__file__, "..", "README.md"))
@@ -40,7 +43,7 @@ install_requires = [
 ]
 
 setup(name='deepEMhancer',
-      version=VERSION,
+      version=version(),
       description='Deep learning for cryo-EM maps post-processing',
       long_description=readme(),
       long_description_content_type="text/markdown",
