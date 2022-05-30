@@ -174,7 +174,7 @@ deepemhancer -h
 
 ## Usage guide:
 ##### About the input
-DeepEMhancer was trained using half-maps. Thus, as input, both half-maps are the preferred option (deepemhancer -i half1.mrc -i2 half2.mrc).<br> 
+DeepEMhancer was trained using half-maps. Thus, as input, both half-maps are the preferred option (`deepemhancer -i half1.mrc -i2 half2.mrc`).<br> 
 Full maps obtained from refinement process (RELION auto-refine, cryoSPARC heterogenus refinement...) are equally valid.<br>
 However, deepEMhancer will not work correctly if post-processed (masked, sharpened...) maps are provided as input 
 (e.g. RELION postprocessing maps).
@@ -182,10 +182,11 @@ However, deepEMhancer will not work correctly if post-processed (masked, sharpen
 We provide 3 different deep learning models. The default one is the tightTarget model, that was trained using
 tightly masked volumes. This is the default option and all the statistics reported in the publication were obtained 
 using this model. Additionally, we provide a wideTarget model that was trained using less tightly masked maps. Finally,
-we have also trained a model (highRes) using a subset of the maps with resolutions <4 Å.<br>
+we have also trained a model (highRes) using a subset of the maps with resolutions <4 Å and fewer empty cubes.<br>
 We recommend our users to try the different options and choose the one that looks nicer to them. As a guidance, 
 we suggest to employ the highRes model for maps with overall resolution better than 4 Å and a moderate amount of bad
-resolution regions. If the overall resolution is worse, or the number of low resolution regions is high, the tightTarget
+resolution regions. HighRes solutions tend to be noisier than others, but also more enhanced. 
+If the overall resolution is worse, or the number of low resolution regions is high, the tightTarget
 model should do a good job. For cases in which both tightTarget and highRes produce too tightly masked solutions, possibly removing
 some parts of the protein as if they were noise, we recommend to employ the wideTarget model.
 
