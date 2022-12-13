@@ -7,7 +7,7 @@ from setuptools import setup
 def version():
   initPath = os.path.abspath(os.path.join(__file__, "..", "deepEMhancer", "__init__.py"))
   with open(initPath) as f:
-    version = f.read().strip().split("=")[-1]
+    version = f.read().strip().split('"')[-2]
   return version
       
 def readme():
