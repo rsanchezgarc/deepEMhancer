@@ -15,8 +15,11 @@ def load_model(checkpoint_fname, custom_objects=None, lastLayerToFreeze=None, re
       custom_objects= codes["custom_objects"]
 
 
-  from tensorflow.keras.models import load_model
-
+  if int(tf.__version__.split(".")[0]) > 1:
+    from tensorflow.keras.models import load_model
+  else:
+      from keras.models import load_model
+      
   if nGpus>1:
     devices_names = list(map(lambda x:":".join( x.name.split(":")[-2:]), tf.config.list_physical_devices('GPU')))
     mirrored_strategy = tf.distribute.MirroredStrategy(devices= devices_names )

@@ -1,4 +1,6 @@
+import deepEMhancer
 from ..config import BATCH_SIZE
+
 
 processVolOptions= [
 
@@ -91,5 +93,8 @@ processVolOptions= [
        "help": "Number of cubes to process simultaneously. Lower it if CUDA Out Of Memory error happens and increase it if low GPU performance observed. Default: %(default)s"
      }),
 
-
+    ("--version", {
+        "action": "version",
+        "version": deepEMhancer.__version__,
+    }),
 ]

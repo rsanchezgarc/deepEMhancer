@@ -1,6 +1,6 @@
 import os, sys, gc
 import numpy as np
-from skimage.util import pad
+from numpy import pad
 from tqdm import tqdm
 
 from ..config import RESIZE_VOL_TO, BATCH_SIZE
