@@ -1,10 +1,15 @@
 # Deep cryo-EM Map Enhancer (DeepEMhancer)
 **DeepEMhancer** is a python package designed to perform post-processing of
 cryo-EM maps as described in "<a href=https://doi.org/10.1038/s42003-021-02399-1 >DeepEMhancer:
-a deep learning solution for cryo-EM volume post-processing</a>", by Sanchez-Garcia et al, 2021.<br>
+a deep learning solution for cryo-EM volume post-processing</a>", by Sanchez-Garcia et al, 2021.<br>>
+DeepEMhancer is a deep learning model trained on pairs of experimental volumes and atomic model-corrected volumes that is 
+able to obtain post-processed maps using as input raw volumes, preferably half maps. Please notice that post-translational 
+modifications and ligands were not included in the traning set and consequently, results for these features could be inaccurate.<br>
+
 Simply speaking, DeepEMhancer performs a non-linear post-processing of cryo-EM maps that produces two main effects:
 1) Local sharpening-like post-processing.
 2) Automatic masking/denoising of cryo-EM maps.
+
 
 ## Table of Contents  
 - [INSTALLATION](#installation)  
@@ -21,6 +26,8 @@ To get a complete description of usage, execute
 - [Install from Anaconda cloud](#install-from-anaconda-cloud)
 - [Alternative installation for old versions](#alternative-installation-for-old-versions)
 - [No conda installation](#no-conda-installation)
+- [Tensorflow 2 installation](#tensorflow-2-installation)
+
 #### Requirements
 DeepEMhancer has been tested on Linux systems.
 Current version employs Tensorflow version 2.10 that requires CUDA 11. Our installation recipe will
@@ -184,10 +191,29 @@ deepemhancer --download
 deepemhancer -h
 ```
 
+### Tensorflow 2 installation
+
+1) Clone this repository and cd inside
+```
+git clone https://github.com/rsanchezgarc/deepEMhancer
+cd deepEMhancer
+```
+2) Switch to Tensorflow 2 branch `git checkout tf2`
+3) Create a conda environment `conda env create -f alternative_installation/deepEMhancer_tf2.env.yml`. You may want to specificity an environment name using `-n envName`.
+4) Activate the environment `conda activate envName`
+5) Install deepEmhancer as a command line tool `pip install --no-deps .`
+6) Download deep learning models `deepemhancer --download`
+7) Modify the original models to be used with tf2, `python alternative_installation/convert_models_to_tf2.py` (only affects the models in the default location) or  `python alternative_installation/convert_models_to_tf2.py path/where/models/are` if you want to specify the directory where you downloaded the models.
+8) Ready! Do not forget to activate the environment, for future usages. For a complete help use:
+```
+deepemhancer -h
+```
+
+
 ## Usage guide:
 ##### About the input
 
-DeepEMhancer was trained using half-maps. Thus, as input, both half-maps are the preferred option (deepemhancer -i half1.mrc -i2 half2.mrc).<br> 
+DeepEMhancer was trained using half-maps. Thus, as input, both half-maps are the preferred option (`deepemhancer -i half1.mrc -i2 half2.mrc`).<br> 
 Full maps obtained from refinement process (RELION auto-refine, cryoSPARC heterogenus refinement...) are equally valid.<br>
 However, deepEMhancer will not work correctly if post-processed (masked, sharpened...) maps are provided as input 
 (e.g. RELION postprocessing maps).
@@ -196,10 +222,11 @@ However, deepEMhancer will not work correctly if post-processed (masked, sharpen
 We provide 3 different deep learning models. The default one is the tightTarget model, that was trained using
 tightly masked volumes. This is the default option and all the statistics reported in the publication were obtained 
 using this model. Additionally, we provide a wideTarget model that was trained using less tightly masked maps. Finally,
-we have also trained a model (highRes) using a subset of the maps with resolutions <4 Å.<br>
+we have also trained a model (highRes) using a subset of the maps with resolutions <4 Å and fewer empty cubes.<br>
 We recommend our users to try the different options and choose the one that looks nicer to them. As a guidance, 
 we suggest to employ the highRes model for maps with overall resolution better than 4 Å and a moderate amount of bad
-resolution regions. If the overall resolution is worse, or the number of low resolution regions is high, the tightTarget
+resolution regions. HighRes solutions tend to be noisier than others, but also more enhanced. 
+If the overall resolution is worse, or the number of low resolution regions is high, the tightTarget
 model should do a good job. For cases in which both tightTarget and highRes produce too tightly masked solutions, possibly removing
 some parts of the protein as if they were noise, we recommend to employ the wideTarget model.
 
@@ -222,7 +249,7 @@ when it is possible to employ normalization mode 1.
 DeepEMhancer processes input maps by chunking them into smaller cubes that are sent to GPUs. Batch size parameter represent
 the number of smaller cubes that are simultaneously processed by the GPUs. A typical value for an 8 GB GPU could be<br> 
 ```--batch_size 6```. If OUT OF MEMORY error happens, try to lower batch_size, and if low GPU usage is observed (via nvidia-smi), try
-to increase it.
+to increase it. Setting the environmental variable `TF_FORCE_GPU_ALLOW_GROWTH='true'` prior execution could also help to fix some GPU memory errors. When using multiple GPUs, for certain box sizes, there might happen a reported bug affecting the batch_size, please see [TROUBLESHOOTING](#Troubleshooting) error 3.
 
 
 
@@ -285,7 +312,7 @@ E tensorflow/stream_executor/cuda/cuda_dnn.cc:329] Could not create cudnn handle
 In other cases is related with an incompatibility between CUDA and cudnn versions.<br>
 
 - Solution: 
-  - If it is caused by memory constrains, set dynamic GPU allocation using the environment variable 
+  - If it is caused by memory constraints, set dynamic GPU allocation using the environment variable 
 TF_FORCE_GPU_ALLOW_GROWTH='true'. E.g. 
 ```TF_FORCE_GPU_ALLOW_GROWTH='true' deepemhancer -i ~/tmp/useCase/EMD-0193.mrc -o ~/tmp/outVolDeepEMhancer/out.mrc
 ```
@@ -293,8 +320,20 @@ TF_FORCE_GPU_ALLOW_GROWTH='true'. E.g.
   - If it is caused by incompatibility between CUDA and cudnn, you should try to reinstall it ensuring that
     CUDA and cudnn versions match and they are compatible with the Tensorflow version. We are using Tensorflow
     version 14, but we think that older versions, compatible with CUDA 9 could also work.
-    
-3.
+
+
+
+3. 
+- Error:
+```
+F ./tensorflow/core/kernels/conv_2d_gpu.h:935] Non-OK-status: CudaLaunchKernel( SwapDimension1And2InTensor3UsingTiles<T, kNumThreads, kTileSize, kTileSize, conjugate>, total_tiles_count, kNumThreads, 0, d.stream(), input, input_dims, output) status: Internal: invalid configuration argument
+
+Aborted (core dumped)
+```
+- Explanation: This is a reported issue for Tensorflow when using multiple GPUS and the number of subcubes or the batch size is not divisible by the number of GPUs
+- Solution: Use only one GPU (`-g 1`) and/or batch size 1 (`-b 1`)
+
+4. 
 - Error:
 It is not possible to download the models. 
 -Explanation:

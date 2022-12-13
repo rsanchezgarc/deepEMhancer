@@ -3,7 +3,6 @@ import os
 import setuptools
 from setuptools import setup
 
-
 def version():
   initPath = os.path.abspath(os.path.join(__file__, "..", "deepEMhancer", "__init__.py"))
   with open(initPath) as f:
