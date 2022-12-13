@@ -5,7 +5,7 @@ RESIZE_VOL_TO= 1.
 NNET_INPUT_SIZE=64
 NNET_INPUT_STRIDE= NNET_INPUT_SIZE//4
 
-DOWNLOAD_MODEL_URL = 'http://campins.cnb.csic.es/deepEMhancer/deepEMhancerModels.zip'
+DOWNLOAD_MODEL_URL = 'https://zenodo.org/record/7432763/files/deepEMhancerModels_tf1.zip'
 MODEL_DOWNLOAD_EXPECTED_SIZE=739163136
 
 DEFAULT_MODEL_DIR = os.path.expanduser("~/.local/share/deepEMhancerModels/production_checkpoints")
