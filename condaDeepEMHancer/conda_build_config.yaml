@@ -1,0 +1,6 @@
+c_compiler: gcc
+ignore_build_only_deps:
+- numpy
+- python
+numpy: '1.22'
+python: '3.10'

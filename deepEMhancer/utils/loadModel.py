@@ -1,5 +1,5 @@
 import os
-
+import tensorflow as tf
 import h5py
 from .ioUtils import loadVolIfFnameOrIgnoreIfMatrix
 
@@ -15,11 +15,18 @@ def load_model(checkpoint_fname, custom_objects=None, lastLayerToFreeze=None, re
       custom_objects= codes["custom_objects"]
 
 
-  from keras.models import load_model
-  model= load_model(checkpoint_fname, custom_objects=custom_objects )
+  if int(tf.__version__.split(".")[0]) > 1:
+    from tensorflow.keras.models import load_model
+  else:
+      from keras.models import load_model
+      
   if nGpus>1:
-    from keras.utils import multi_gpu_model
-    model= multi_gpu_model(model, gpus=nGpus)
+    devices_names = list(map(lambda x:":".join( x.name.split(":")[-2:]), tf.config.list_physical_devices('GPU')))
+    mirrored_strategy = tf.distribute.MirroredStrategy(devices= devices_names )
+    with mirrored_strategy.scope():
+      model = load_model(checkpoint_fname, custom_objects=custom_objects )
+  else:
+      model = load_model(checkpoint_fname, custom_objects=custom_objects )
 
   if lastLayerToFreeze is not None:
     layerFound= False
@@ -32,13 +39,14 @@ def load_model(checkpoint_fname, custom_objects=None, lastLayerToFreeze=None, re
 
   if resetWeights:
     print("Model reset")
-    import keras.backend as K
-    session = K.get_session()
-    for layer in model.layers:
+    for i, layer in enumerate(model.layers):
+      initializers = []
       if hasattr(layer, 'kernel_initializer'):
-        layer.kernel.initializer.run(session=session)
+        initializers += [ lambda : layer.kernel_initializer(shape=model.layers[i].get_weights()[0].shape) ]
       if hasattr(layer, 'bias_initializer') and layer.bias is not None:
-        layer.bias.initializer.run(session=session)
+        initializers += [ lambda : layer.bias_initializer(shape=model.layers[i].get_weights()[1].shape) ]
+      if len(initializers)>0:
+        model.layers[i].set_weights( [f() for f in initializers ]  )
   return model
 
 
@@ -65,7 +73,7 @@ def retrieveParamsFromHd5(fname, paramsList, codeList):
   codes={}
   try:
     with h5py.File(fname,'r') as h5File:
-      # print(h5File.keys())
+#      print(h5File.keys())
       for paramName in paramsList:
         if paramName.endswith("*"):
           paramName=paramName.replace("/*", "")
@@ -116,6 +124,10 @@ def loadChunkConfigFromModel(kerasCheckpointFname):
   else:
     return args
 
-
-#conf=loadChunkConfigFromModel("/home/ruben/Tesis/cryoEM_cosas/auto3dMask/data/nnetResults/checkpoints/bestCheckpoint_locscale.hd5"); print(conf)
-# conf=loadChunkConfigFromModel("/home/ruben/Tesis/cryoEM_cosas/auto3dMask/data/nnetResults/vt2_m_28_checkpoints/bestCheckpoint_locscale_masked.hd5"); print(conf)
+if __name__ == "__main__":
+  from config import DEFAULT_MODEL_DIR
+  print( DEFAULT_MODEL_DIR )
+  fname = os.path.join(DEFAULT_MODEL_DIR, "deepEMhancer_highRes.hd5")
+  conf=loadChunkConfigFromModel( fname); print(conf)
+  conf = retrieveParamsFromHd5(fname, [], ["code/*"]); print(conf)
+  #conf=loadChunkConfigFromModel("/home/ruben/Tesis/cryoEM_cosas/auto3dMask/data/nnetResults/vt2_m_28_checkpoints/bestCheckpoint_locscale_masked.hd5"); print(conf)

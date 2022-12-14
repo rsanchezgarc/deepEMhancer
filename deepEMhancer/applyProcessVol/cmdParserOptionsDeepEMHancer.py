@@ -1,7 +1,6 @@
-import pkg_resources
-
 import deepEMhancer
 from ..config import BATCH_SIZE
+
 
 processVolOptions= [
 
@@ -96,7 +95,6 @@ processVolOptions= [
 
     ("--version", {
         "action": "version",
-        "version": deepEMhancer.__version__, #pkg_resources.require("deepEMhancer")[0].version,
+        "version": deepEMhancer.__version__,
     }),
-
 ]

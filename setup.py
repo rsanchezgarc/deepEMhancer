@@ -1,13 +1,14 @@
-import importlib
 import os
 
 import setuptools
 from setuptools import setup
 
 def version():
-    version = importlib.import_module("deepEMhancer").__version__
-    return version
-
+  initPath = os.path.abspath(os.path.join(__file__, "..", "deepEMhancer", "__init__.py"))
+  with open(initPath) as f:
+    version = f.read().strip().split('"')[-2]
+  return version
+      
 def readme():
   readmePath = os.path.abspath(os.path.join(__file__, "..", "README.md"))
   try:
@@ -20,27 +21,25 @@ def readme():
     except Exception as e:
       return "Description not available due to unexpected error: "+str(e)
 
-installTfGpu = os.environ.get("DEEPEMHANCER_INSTALL_GPU", None)
-if installTfGpu:
-  tfTarget='-gpu==1.14.*'
-else:
-  tfTarget='==1.14.*'
 
 install_requires = [
-  'numpy==1.16.*',
-  'scikit-image==0.15.*',
-  'scipy==1.3.1',
-  'joblib==0.13.*',
-  'tensorflow%s'%tfTarget,
-  'keras==2.2.*',
-  'pandas==0.25.*',
-  'mrcfile==1.1.2',
-  'requests==2.22.*',
-  'tqdm==4.42',
-  'mrcfile==1.1.2',
-  'keras-radam== 0.12',
-  'keras-contrib @ git+https://github.com/keras-team/keras-contrib.git@3fc5ef709e061416f4bc8a92ca3750c824b5d2b0'
+  'numpy==1.23.*',
+  'scikit-image==0.19.*',
+  'scipy==1.9.*',
+  'joblib==1.2.*',
+  'mrcfile==1.4.*',
+  'requests==2.28.*',
+  'tqdm==4.64',
 ]
+
+installTfCpuOnly = os.environ.get("DEEPEMHANCER_CPU_ONLY", None)
+if not installTfCpuOnly:
+  tfTarget='tensorflow-gpu==2.10.*'
+#  install_requires.append("cuda-python==11.8.*") #Install cuda. Not working
+#  install_requires.append("nvidia-cudnn-cu11==8.5.*") #Install cuda. Not working
+else:
+  tfTarget='tensorflow==2.10.*'
+install_requires.append(tfTarget)
 
 setup(name='deepEMhancer',
       version=version(),
@@ -60,4 +59,6 @@ setup(name='deepEMhancer',
       },
       include_package_data=True,
       zip_safe=False)
+#python -c "import tensorflow as tf; tf.zeros((3,2))" && python -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"
+
 
