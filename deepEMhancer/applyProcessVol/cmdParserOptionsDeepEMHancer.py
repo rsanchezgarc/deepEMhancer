@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-=======
-import pkg_resources
-
->>>>>>> origin/master
 import deepEMhancer
 from ..config import BATCH_SIZE
 
