@@ -97,7 +97,7 @@ deepemhancer -h
 
 ### Alternative installation for old versions
 You can install from the repository the older deepEMhancer version that works well in old GPUs. The process is identical
-to the option number 1, "Install from source option", except that you need to use the tag 0.10
+to the option number 1, "Install from source option", except that you need to use the tag 0.14
 <br><br>Steps:
 1) Clone the tag "0.14" of the repository repository and cd inside
 ```
