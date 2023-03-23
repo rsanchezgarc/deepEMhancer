@@ -104,7 +104,8 @@ to the option number 1, "Install from source option", except that you need to us
 git clone --depth 1 --branch "0.14"  https://github.com/rsanchezgarc/deepEMhancer
 cd deepEMhancer
 ```
-The following steps are the same as in option 1.
+The following steps are the same as in option 1.<br>
+
 2) Create a conda environment with the required dependencies
 ```
 conda env create -f deepEMhancer_env.yml  -n deepEMhancer_env
