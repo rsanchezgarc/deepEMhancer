@@ -26,7 +26,6 @@ To get a complete description of usage, execute
 - [Install from Anaconda cloud](#install-from-anaconda-cloud)
 - [Alternative installation for old versions](#alternative-installation-for-old-versions)
 - [No conda installation](#no-conda-installation)
-- [Tensorflow 2 installation](#tensorflow-2-installation)
 
 #### Requirements
 DeepEMhancer has been tested on Linux systems.
@@ -191,25 +190,6 @@ deepemhancer --download
 ```
 deepemhancer -h
 ```
-
-### Tensorflow 2 installation
-
-1) Clone this repository and cd inside
-```
-git clone https://github.com/rsanchezgarc/deepEMhancer
-cd deepEMhancer
-```
-2) Switch to Tensorflow 2 branch `git checkout tf2`
-3) Create a conda environment `conda env create -f alternative_installation/deepEMhancer_tf2.env.yml`. You may want to specificity an environment name using `-n envName`.
-4) Activate the environment `conda activate envName`
-5) Install deepEmhancer as a command line tool `pip install --no-deps .`
-6) Download deep learning models `deepemhancer --download`
-7) Modify the original models to be used with tf2, `python alternative_installation/convert_models_to_tf2.py` (only affects the models in the default location) or  `python alternative_installation/convert_models_to_tf2.py path/where/models/are` if you want to specify the directory where you downloaded the models.
-8) Ready! Do not forget to activate the environment, for future usages. For a complete help use:
-```
-deepemhancer -h
-```
-
 
 ## Usage guide:
 ##### About the input
