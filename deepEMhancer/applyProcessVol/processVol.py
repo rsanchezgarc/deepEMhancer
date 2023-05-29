@@ -42,7 +42,10 @@ class AutoProcessVol(object):
     print("DONE!")
 
   def _updateMask(self, coords_list, batch_y_pred, mask, weights):
-    for (i, j, k), mask_chunk in zip(coords_list, batch_y_pred):
+    for coord, mask_chunk in zip(coords_list, batch_y_pred):
+      if coord is None:
+        continue
+      (i, j, k) = coord
       mask_chunk= np.squeeze(mask_chunk)
       di, dj, dk = mask_chunk.shape
       mask[i:i + di, j:j + dj, k:k + dk] += mask_chunk
@@ -89,6 +92,7 @@ class AutoProcessVol(object):
     j_range= range(0, vol_shape[1] - (chunk_size - 1), stride)
     k_range= range(0, vol_shape[2] - (chunk_size - 1), stride)
     progressBar= tqdm(total=len(i_range)*len(j_range))
+    count = 0
     for i in i_range:
       for j in j_range:
         for k in k_range:
@@ -97,8 +101,12 @@ class AutoProcessVol(object):
               continue
           cubeX = vol[i:i + chunk_size, j:j + chunk_size, k:k + chunk_size]
           yield cubeX, (i, j, k)
+          count += 1
         progressBar.update()
         progressBar.refresh()
+        while count % self.batch_size != 0:
+            yield cubeX, None
+            count += 1
     progressBar.close()
 
   def _padToDivisibleSize(self, x, fillWith0=False):
