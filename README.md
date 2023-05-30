@@ -317,7 +317,7 @@ Aborted (core dumped)
 4. 
 - Error:
 It is not possible to download the models. 
--Explanation:
+- Explanation:
 Sometimes our server may not be reachable due to network problems.
--Solution:
+- Solution:
 Download them from https://zenodo.org/record/7432763
