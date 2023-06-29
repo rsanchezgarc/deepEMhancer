@@ -1,0 +1,24 @@
+name: deepEMhancer_env
+channels:
+  - conda-forge
+  - defaults
+  - nvidia
+dependencies:
+  - cudatoolkit
+  - cudnn
+  - h5py
+  - hdf5
+  - joblib
+  - mrcfile
+  - numpy
+  - pip
+  - python
+  - requests
+  - ruamel.yaml>
+  - scikit-image
+  - scipy
+  - tensorboard
+  - tensorflow-gpu>=2.5
+  - tqdm
+  - yaml
+  - conda-build

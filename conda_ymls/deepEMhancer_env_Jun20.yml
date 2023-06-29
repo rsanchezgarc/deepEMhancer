@@ -1,0 +1,22 @@
+channels:
+  - anaconda
+  - conda-forge
+  - defaults
+dependencies:
+  - h5py=2.9
+  - joblib=0.13.2
+  - keras=2.2
+  - numba=0.45
+  - numpy=1.16
+  - pandas=0.25
+  - python=3.6
+  - requests=2.22
+  - scikit-image=0.15
+  - scipy=1.3.1
+  - tensorflow-gpu=1.14
+  - tqdm=4.42
+  - pip=19.2.2
+  - pip:
+    - git+https://www.github.com/keras-team/keras-contrib.git@3fc5ef709e061416f4bc8a92ca3750c824b5d2b0
+    - mrcfile==1.1.2
+    - keras-radam==0.12
