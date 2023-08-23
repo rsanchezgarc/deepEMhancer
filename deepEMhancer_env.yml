@@ -47,6 +47,3 @@ dependencies:
       - tensorflow-io-gcs-filesystem==0.32.0
       - termcolor==2.3.0
       - typing-extensions==4.7.0
-env_vars:
-  CUDNN_PATH: $CONDA_PREFIX/lib/python3.9/site-packages/nvidia/cudnn/
-  LD_LIBRARY_PATH: $CUDNN_PATH/lib:$CONDA_PREFIX/lib/:$LD_LIBRARY_PATH

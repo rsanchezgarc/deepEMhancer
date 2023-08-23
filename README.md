@@ -54,15 +54,20 @@ conda env create -f deepEMhancer_env.yml  -n deepEMhancer_env
 ```
 conda activate deepEMhancer_env
 ```
-4) Install deepEMhancer
+4) Set CUDA LD_LIBRARY_PATH
+```
+conda env config vars set LD_LIBRARY_PATH=${CONDA_PREFIX}/lib/python3.9/site-packages/nvidia/cudnn/lib:${CONDA_PREFIX}/lib/:$LD_LIBRARY_PATH
+conda activate deepEMhancer_env #To make the changes effective
+```
+5) Install deepEMhancer
 ```
 python -m pip install . --no-deps
 ```
-5) Download our deep learning models
+6) Download our deep learning models
 ```
 deepemhancer --download
 ```
-6) Ready! Do not forget to activate the environment for future usages. For a complete help use:
+7) Ready! Do not forget to activate the environment for future usages. For a complete help use:
 ```
 deepemhancer -h
 ```
