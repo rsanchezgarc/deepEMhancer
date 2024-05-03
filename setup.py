@@ -29,7 +29,7 @@ install_requires = [
   'joblib==1.2.*',
   'mrcfile==1.4.*',
   'requests==2.28.*',
-  'tqdm==4.64',
+  'tqdm==4.66.3',
 ]
 
 installTfCpuOnly = os.environ.get("DEEPEMHANCER_CPU_ONLY", None)
