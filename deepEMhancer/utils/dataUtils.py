@@ -43,7 +43,7 @@ def _generateRadialDistances(data):
   return R
 
 def radial_profile(data):
-  r = _generateRadialDistances(data).astype(np.int)
+  r = _generateRadialDistances(data).astype(np.int32)
   tbin = np.bincount(r.ravel(), data.ravel())
   nr = np.bincount(r.ravel())
   radialprofile = tbin / nr
