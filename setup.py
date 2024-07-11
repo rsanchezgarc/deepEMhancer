@@ -28,7 +28,7 @@ install_requires = [
   'scipy==1.9.*',
   'joblib==1.2.*',
   'mrcfile==1.4.*',
-  'requests==2.28.*',
+  'requests==2.31.*',
   'tqdm==4.66.3',
 ]
 
