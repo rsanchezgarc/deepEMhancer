@@ -1,5 +1,5 @@
 {% set name = "deepEMhancer" %}
-{% set version = "0.14" %}
+{% set version = "0.16" %}
 
 package:
   name: "{{ name|lower }}"
@@ -27,9 +27,10 @@ requirements:
     - requests ==2.28.*
     - scikit-image ==0.19.*
     - scipy ==1.9.*
-    - tensorflow-gpu ==2.10.*
+    - tensorflow-gpu ==2.12.*
     - tqdm ==4.64
-    - flatbuffers ==22.12.*
+    - h5py * nompi*
+    - flatbuffers
   run:
     - numpy ==1.23.*
     - setuptools
@@ -40,9 +41,10 @@ requirements:
     - requests ==2.28.*
     - scikit-image ==0.19.*
     - scipy ==1.9.*
-    - tensorflow-gpu ==2.10.*
+    - tensorflow-gpu ==2.12.*
     - tqdm ==4.64
-    - flatbuffers ==22.12.*
+    - h5py * nompi*
+    - flatbuffers     
 test:
   imports:
     - deepEMhancer
