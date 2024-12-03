@@ -74,13 +74,11 @@ deepemhancer -h
 7) Optionally, you can remove the folder, since deepemhancer will be available anywhere once you activate the environment
 
 ### Install from Anaconda cloud:
-Requires anaconda/miniconda, that can be obtained from <ref>hhttps://www.anaconda.com/products/individual</ref>. This option will
-install the legacy version of deepEMhancer that uses Tensorflow 1.14 and CUDA 10.2. It does not work well in some of the newer 
-GPU cards.
+Requires anaconda/miniconda, that can be obtained from <ref>hhttps://www.anaconda.com/products/individual</ref>.
 
 1) Create a fresh conda environment
 ```
-conda create -n deepEMhancer_env python=3.6
+conda create -n deepEMhancer_env python=3.10
 ```
 2) Activate the environment. You always need to activate the environment before executing deepEMhancer
 ```
