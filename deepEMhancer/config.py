@@ -23,7 +23,4 @@ BATCH_SIZE=8
 MAX_VAL_AFTER_NORMALIZATION=200
 
 
-def GET_CUSTOM_OBJECTS():
-  from keras_contrib.layers.normalization import groupnormalization
-  return {"GroupNormalization":groupnormalization.GroupNormalization}
 
