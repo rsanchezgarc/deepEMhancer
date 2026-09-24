@@ -22,10 +22,10 @@ To get a complete description of usage, execute
 ## INSTALLATION:
 
 - [Requirements](#requirements)
-- [Install from source option](#install-from-source-option)
-- [Install from Anaconda cloud](#install-from-anaconda-cloud)
+- [Recommended pip installation](#recommended-pip-installation)
+- [Reproducible Conda environment](#reproducible-conda-environment)
 - [Alternative installation for old versions](#alternative-installation-for-old-versions)
-- [No conda installation](#no-conda-installation)
+- [Install from a source checkout](#install-from-a-source-checkout)
 
 #### Requirements
 DeepEMhancer has been tested on Linux systems (including WSL2) with Python 3.10-3.13 and TensorFlow 2.21.
@@ -33,59 +33,36 @@ The supplied environment installs TensorFlow's official `and-cuda` extra, which 
 runtime libraries. A sufficiently recent NVIDIA driver is still required. CPU-only execution remains available but
 is considerably slower.
 
-### Install from source option:
-The best option to keep you updated. This installs TensorFlow 2.21 and its CUDA 12 runtime dependencies. <br>
-Requires anaconda/miniconda, that can be obtained from <ref>https://www.anaconda.com/products/individual</ref>
-<br><br>Steps:
-1) Clone this repository and cd inside
+### Recommended pip installation
+
+Create and activate a Python 3.10-3.13 virtual environment, then install DeepEMhancer directly
+from GitHub. GPU support and its CUDA runtime libraries are installed by default.
+
 ```
-git clone https://github.com/rsanchezgarc/deepEMhancer
+python3 -m venv deepEMhancer_env
+source deepEMhancer_env/bin/activate
+python -m pip install "git+https://github.com/rsanchezgarc/deepEMhancer.git"
+deepemhancer --download
+deepemhancer -h
+```
+
+For a CPU-only installation, set `DEEPEMHANCER_CPU_ONLY` while installing:
+
+```
+DEEPEMHANCER_CPU_ONLY=1 python -m pip install "git+https://github.com/rsanchezgarc/deepEMhancer.git"
+```
+
+### Reproducible Conda environment
+
+The pinned environment is useful for reproducing the dependency versions tested for this release:
+
+```
+git clone https://github.com/rsanchezgarc/deepEMhancer.git
 cd deepEMhancer
-```
-2) Create a conda environment with the required dependencies
-```
-conda env create -f deepEMhancer_env.yml  -n deepEMhancer_env
-```
-3) Activate the environment. You always need to activate the environment before executing deepEMhancer
-```
+conda env create -f deepEMhancer_env.yml -n deepEMhancer_env
 conda activate deepEMhancer_env
-```
-4) Install deepEMhancer
-```
 python -m pip install . --no-deps
-```
-5) Download our deep learning models
-```
 deepemhancer --download
-```
-6) Ready! Do not forget to activate the environment for future usages. For a complete help use:
-```
-deepemhancer -h
-```
-7) Optionally, you can remove the folder, since deepemhancer will be available anywhere once you activate the environment.
-
-### Install from Anaconda cloud:
-Requires anaconda/miniconda, that can be obtained from <ref>https://www.anaconda.com/products/individual</ref>.
-
-1) Create a fresh conda environment
-```
-conda create -n deepEMhancer_env python=3.11
-```
-2) Activate the environment. You always need to activate the environment before executing deepEMhancer
-```
-conda activate deepEMhancer_env
-```
-4) Install deepEMhancer
-```
-conda install deepEMhancer -c rsanchez1369 -c anaconda -c conda-forge
-```
-5) Download our deep learning models
-```
-deepemhancer --download
-```
-6) Ready! Do not forget to activate the environment for future usages. For a complete help use:
-```
-deepemhancer -h
 ```
 
 ### Alternative installation for old versions
@@ -140,47 +117,26 @@ It has been reported that some problems with cudnn may occur when using this ins
 see [TROUBLESHOOTING](#Troubleshooting) section 2 for a proposed solution. 
 
 
-### No conda installation
-Requires Python 3.10-3.13. A virtual environment is recommended to isolate packages.
+### Install from a source checkout
 
-1) Clone this repository and cd inside
+For development or to install an unreleased branch:
+
 ```
-git clone https://github.com/rsanchezgarc/deepEMhancer
+git clone https://github.com/rsanchezgarc/deepEMhancer.git
 cd deepEMhancer
+python -m pip install .
+deepemhancer --download
 ```
 
-1.1. Optionally, create a virtual environment and activate it
-```
-pip install virtualenv
-virtualenv --system-site-packages -p python3 ./deepEMhancer_env
-source ./deepEMhancer_env/bin/activate
-```
-2) Install DeepEMhancer
-- For CPU-only use (expect long running times on full maps)
-```
-DEEPEMHANCER_CPU_ONLY=1 python -m pip install .
-```
-- With GPU support (default)
-```
-python -m pip install .
-```
-  - Check if GPUs are successfully detected.
+Check that TensorFlow detects the GPU:
+
 ```
 python -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"
 ```
 
 The command should print at least one `PhysicalDevice` with `device_type='GPU'`. If it prints an empty list,
-check the NVIDIA driver and reinstall the GPU extra in a clean environment; do not mix it with separately installed
-CUDA or cuDNN packages.
-  
-5) Download our deep learning models
-```
-deepemhancer --download
-```
-6) Ready! Do not forget to activate the environment, if used (step 1.1), for future usages. For a complete help use:
-```
-deepemhancer -h
-```
+check the NVIDIA driver and reinstall in a clean environment; do not mix the bundled runtime with separately
+installed CUDA or cuDNN packages.
 
 ## Usage guide:
 ##### About the input

@@ -1,5 +1,5 @@
 {% set name = "deepEMhancer" %}
-{% set version = "0.17" %}
+{% set version = "0.18" %}
 
 package:
   name: "{{ name|lower }}"
