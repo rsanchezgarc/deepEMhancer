@@ -21,6 +21,9 @@ class AutoProcessVol(object):
     gpuIds, nGpus = configureGpuEnvironment(gpuIds)
 
     batch_size= BATCH_SIZE if batch_size is None else batch_size
+    if batch_size < 1:
+      raise ValueError("batch_size must be at least 1")
+    self.batch_size_per_gpu = batch_size
     self.batch_size = batch_size*nGpus
     print("loading model %s ..."%model_fname, end=" ")
     self.model_fname= model_fname
@@ -36,6 +39,19 @@ class AutoProcessVol(object):
       self.nnet_input_stride= chunkInfo["NNET_INPUT_STRIDE"]
 
     print("DONE!")
+
+  def _predictOnBatch(self, batch_x):
+    from tensorflow.errors import ResourceExhaustedError
+
+    try:
+      return self.model.predict_on_batch(np.expand_dims(batch_x, axis=-1))
+    except ResourceExhaustedError as error:
+      suggested_batch_size = max(1, self.batch_size_per_gpu // 2)
+      raise RuntimeError(
+        "TensorFlow ran out of device memory with --batch_size %d. "
+        "Run DeepEMhancer again with a smaller value, for example --batch_size %d."
+        % (self.batch_size_per_gpu, suggested_batch_size)
+      ) from error
 
   def _updateMask(self, coords_list, batch_y_pred, mask, weights):
     for coord, mask_chunk in zip(coords_list, batch_y_pred):
@@ -187,7 +203,7 @@ class AutoProcessVol(object):
       n_cubes+=1
       if n_cubes==self.batch_size:
         batch_x= np.stack(batch_x)
-        batch_y_pred= self.model.predict_on_batch(np.expand_dims(batch_x, axis=-1))
+        batch_y_pred= self._predictOnBatch(batch_x)
 
         self._updateMask(coords_list, batch_y_pred, processVol, weights)
         batch_x, coords_list= [], []
@@ -196,7 +212,7 @@ class AutoProcessVol(object):
       batch_x = np.stack(batch_x)[:n_cubes,...]
       coords_list = coords_list[:n_cubes]
 
-      batch_y_pred = self.model.predict_on_batch(np.expand_dims(batch_x, axis=-1))
+      batch_y_pred = self._predictOnBatch(batch_x)
       self._updateMask(coords_list, batch_y_pred, processVol, weights)
 
     processVol= processVol/weights
