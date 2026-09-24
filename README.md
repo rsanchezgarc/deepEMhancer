@@ -22,79 +22,47 @@ To get a complete description of usage, execute
 ## INSTALLATION:
 
 - [Requirements](#requirements)
-- [Install from source option](#install-from-source-option)
-- [Install from Anaconda cloud](#install-from-anaconda-cloud)
+- [Recommended pip installation](#recommended-pip-installation)
+- [Reproducible Conda environment](#reproducible-conda-environment)
 - [Alternative installation for old versions](#alternative-installation-for-old-versions)
-- [No conda installation](#no-conda-installation)
+- [Install from a source checkout](#install-from-a-source-checkout)
 
 #### Requirements
-DeepEMhancer has been tested on Linux systems.
-Current version employs Tensorflow version 2.10 that requires CUDA 11. Our installation recipe will
-automatically install, among other packages, Tensorflow=2.10 and CUDA 11.8. You can always install the older version
-that used Tensorflow 1.14 and cuda 10.2. If your drivers are not compatible with any of the configurations
-and you cannot update them, you can try to compile tensorflow-gpu=2.10 using your library settings instead of 
-installing it using conda.
+DeepEMhancer has been tested on Linux systems (including WSL2) with Python 3.10-3.13 and TensorFlow 2.21.
+The supplied environment installs TensorFlow's official `and-cuda` extra, which provides the compatible CUDA 12
+runtime libraries. A sufficiently recent NVIDIA driver is still required. CPU-only execution remains available but
+is considerably slower.
 
-### Install from source option:
-The best option to keep you updated. Currently, it uses Tensorflow version 2.10 and CUDA>11.2. This option works
-well in the new Nvidia GPUs (Ampere) but is should also work for the older versions. See other installation options 
-if you want to install the original version of deepEMhancer that does NOT work in Nvidia Ampere GPUs <br>
-Requires anaconda/miniconda, that can be obtained from <ref>https://www.anaconda.com/products/individual</ref>
-<br><br>Steps:
-1) Clone this repository and cd inside
+### Recommended pip installation
+
+Create and activate a Python 3.10-3.13 virtual environment, then install DeepEMhancer directly
+from GitHub. GPU support and its CUDA runtime libraries are installed by default.
+
 ```
-git clone https://github.com/rsanchezgarc/deepEMhancer
+python3 -m venv deepEMhancer_env
+source deepEMhancer_env/bin/activate
+python -m pip install "git+https://github.com/rsanchezgarc/deepEMhancer.git"
+deepemhancer --download
+deepemhancer -h
+```
+
+For a CPU-only installation, set `DEEPEMHANCER_CPU_ONLY` while installing:
+
+```
+DEEPEMHANCER_CPU_ONLY=1 python -m pip install "git+https://github.com/rsanchezgarc/deepEMhancer.git"
+```
+
+### Reproducible Conda environment
+
+The pinned environment is useful for reproducing the dependency versions tested for this release:
+
+```
+git clone https://github.com/rsanchezgarc/deepEMhancer.git
 cd deepEMhancer
-```
-2) Create a conda environment with the required dependencies
-```
-conda env create -f deepEMhancer_env.yml  -n deepEMhancer_env
-```
-3) Activate the environment. You always need to activate the environment before executing deepEMhancer
-```
+conda env create -f deepEMhancer_env.yml -n deepEMhancer_env
 conda activate deepEMhancer_env
-```
-4) Set CUDA LD_LIBRARY_PATH
-```
-conda env config vars set LD_LIBRARY_PATH=${CONDA_PREFIX}/lib/python3.9/site-packages/nvidia/cudnn/lib:${CONDA_PREFIX}/lib/:$LD_LIBRARY_PATH
-conda activate deepEMhancer_env #To make the changes effective
-```
-5) Install deepEMhancer
-```
 python -m pip install . --no-deps
-```
-6) Download our deep learning models
-```
 deepemhancer --download
-```
-7) Ready! Do not forget to activate the environment for future usages. For a complete help use:
-```
-deepemhancer -h
-```
-7) Optionally, you can remove the folder, since deepemhancer will be available anywhere once you activate the environment
-
-### Install from Anaconda cloud:
-Requires anaconda/miniconda, that can be obtained from <ref>hhttps://www.anaconda.com/products/individual</ref>.
-
-1) Create a fresh conda environment
-```
-conda create -n deepEMhancer_env python=3.10
-```
-2) Activate the environment. You always need to activate the environment before executing deepEMhancer
-```
-conda activate deepEMhancer_env
-```
-4) Install deepEMhancer
-```
-conda install deepEMhancer -c rsanchez1369 -c anaconda -c conda-forge
-```
-5) Download our deep learning models
-```
-deepemhancer --download
-```
-6) Ready! Do not forget to activate the environment for future usages. For a complete help use:
-```
-deepemhancer -h
 ```
 
 ### Alternative installation for old versions
@@ -149,50 +117,26 @@ It has been reported that some problems with cudnn may occur when using this ins
 see [TROUBLESHOOTING](#Troubleshooting) section 2 for a proposed solution. 
 
 
-### No conda installation
-Only works for python>3.7. Virtualenv is recommended to isolate packages.
+### Install from a source checkout
 
-1) Clone this repository and cd inside
+For development or to install an unreleased branch:
+
 ```
-git clone https://github.com/rsanchezgarc/deepEMhancer
+git clone https://github.com/rsanchezgarc/deepEMhancer.git
 cd deepEMhancer
+python -m pip install .
+deepemhancer --download
 ```
 
-1.1. Optionally, create a virtual environment and activate it
-```
-pip install virtualenv
-virtualenv --system-site-packages -p python3 ./deepEMhancer_env
-source ./deepEMhancer_env/bin/activate
-```
-2) Install deepEMhancer (using Tensorflow 1.14)
-- For CPU only use (expect running times ~ 24h)
-```
-DEEPEMHANCER_CPU_ONLY=1 python -m pip install .
-```
-- With GPU support
-  - Install CUDA 11.7 and cudnn 8.4. Make sure that they are in the LD_LIBRARY_PATH. If you are in a conda environment you probably want to add permanently the following `export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CONDA_PREFIX/lib/`
-  - install python packages
-```
-pip install .
-```
-  - Check if GPUs are successfully detected.
+Check that TensorFlow detects the GPU:
+
 ```
 python -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"
 ```
 
-You will see errors like ```Could not dlopen library 'libcudart.so.11.0'; dlerror``` if CUDA and/or cudnn 
-(libcudnn.so.8) are not correctly installed or detected. On the contrary, if you see the message
-```I tensorflow/core/common_runtime/gpu/gpu_device.cc:1326] Created TensorFlow device```,
-Tensorflow has been able to recognize the GPUs.
-  
-5) Download our deep learning models
-```
-deepemhancer --download
-```
-6) Ready! Do not forget to activate the environment, if used (step 1.1), for future usages. For a complete help use:
-```
-deepemhancer -h
-```
+The command should print at least one `PhysicalDevice` with `device_type='GPU'`. If it prints an empty list,
+check the NVIDIA driver and reinstall in a clean environment; do not mix the bundled runtime with separately
+installed CUDA or cuDNN packages.
 
 ## Usage guide:
 ##### About the input
@@ -274,10 +218,8 @@ tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. S
 ```
 - Explanation: The drivers of your NVIDA GPU are too old.<br>
 
-- Solution: Update your drivers to version >= 418.39. Alternatively, for driver versions 410.48 to 418.39 you could
-try the "Alternative installation for Nvida-Driver 410", the "No conda installation" or install yourself Tensorflow 
-using your CUDA setup. Although we have not tested it, deepEMhancer will probably also work with 
-older Tensorflow versions that require CUDA 9, so they could be also considered.
+- Solution: Update the NVIDIA driver to a version supported by TensorFlow 2.21, then recreate the environment from
+`deepEMhancer_env.yml`. See TensorFlow's current [pip installation requirements](https://www.tensorflow.org/install/pip).
 
 2.
 - Error:
@@ -301,9 +243,8 @@ TF_FORCE_GPU_ALLOW_GROWTH='true'. E.g.
 ```TF_FORCE_GPU_ALLOW_GROWTH='true' deepemhancer -i ~/tmp/useCase/EMD-0193.mrc -o ~/tmp/outVolDeepEMhancer/out.mrc
 ```
 
-  - If it is caused by incompatibility between CUDA and cudnn, you should try to reinstall it ensuring that
-    CUDA and cudnn versions match and they are compatible with the Tensorflow version. We are using Tensorflow
-    version 14, but we think that older versions, compatible with CUDA 9 could also work.
+  - If it is caused by incompatible CUDA libraries, recreate the environment from `deepEMhancer_env.yml`. The
+    `tensorflow[and-cuda]` dependency installs a matched runtime and cuDNN set.
 
 
 

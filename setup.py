@@ -23,23 +23,19 @@ def readme():
 
 
 install_requires = [
-  'numpy==1.23.*',
-  'scikit-image==0.19.*',
-  'scipy==1.9.*',
-  'joblib==1.2.*',
-  'mrcfile==1.4.*',
-  'requests==2.32.*',
-  'tqdm==4.66.3',
+  'h5py>=3.11,<3.15',
+  'mrcfile>=1.5,<1.6',
+  'numpy>=1.26,<2.3',
+  'requests>=2.32,<3',
+  'scikit-image>=0.24,<0.27',
+  'scipy>=1.13,<1.18',
+  'tqdm>=4.67,<5',
 ]
 
-installTfCpuOnly = os.environ.get("DEEPEMHANCER_CPU_ONLY", None)
-if not installTfCpuOnly:
-  tfTarget='tensorflow-gpu==2.10.*'
-#  install_requires.append("cuda-python==11.8.*") #Install cuda. Not working
-#  install_requires.append("nvidia-cudnn-cu11==8.5.*") #Install cuda. Not working
+if os.environ.get('DEEPEMHANCER_CPU_ONLY'):
+  install_requires.append('tensorflow==2.21.*')
 else:
-  tfTarget='tensorflow==2.10.*'
-install_requires.append(tfTarget)
+  install_requires.append('tensorflow[and-cuda]==2.21.*')
 
 setup(name='deepEMhancer',
       version=version(),
@@ -53,12 +49,10 @@ setup(name='deepEMhancer',
       license='Apache 2.0',
       packages=setuptools.find_packages(),
       install_requires=install_requires,
+      python_requires='>=3.10,<3.14',
       dependency_links=[],
       entry_points={
         'console_scripts': ['deepemhancer=deepEMhancer.exeDeepEMhancer:commanLineFun'],
       },
       include_package_data=True,
       zip_safe=False)
-#python -c "import tensorflow as tf; tf.zeros((3,2))" && python -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"
-
-
