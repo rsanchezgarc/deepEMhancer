@@ -3,7 +3,7 @@ import tempfile
 import unittest
 
 from deepEMhancer.utils.loadModel import (
-    _disable_jit_compilation,
+    _configure_jit_compilation,
     _keras_compatible_model_path,
     getInputCubeSize,
 )
@@ -42,10 +42,15 @@ class LoadModelCompatibilityTests(unittest.TestCase):
     self.assertEqual(getInputCubeSize(_ModelWithShape()), 64)
     self.assertEqual(getInputCubeSize(_ModelWithMultipleInputs()), 48)
 
-  def test_jit_compilation_is_disabled_for_inference(self):
+  def test_jit_compilation_is_disabled_by_default(self):
     model = _JitCompiledModel()
-    self.assertIs(_disable_jit_compilation(model), model)
+    self.assertIs(_configure_jit_compilation(model), model)
     self.assertFalse(model.jit_compile)
+
+  def test_jit_compilation_can_be_enabled(self):
+    model = _JitCompiledModel()
+    self.assertIs(_configure_jit_compilation(model, enable_jit=True), model)
+    self.assertTrue(model.jit_compile)
 
 
 if __name__ == "__main__":

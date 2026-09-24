@@ -11,20 +11,24 @@ from ..utils.loadModel import load_model, getInputCubeSize, loadNormalizationFun
 from .utilsPostprocess import removeSmallCCs, morphologicalDilation
 
 class AutoProcessVol(object):
-  def __init__(self, model_fname, gpuIds="0", batch_size=BATCH_SIZE):
+  def __init__(self, model_fname, gpuIds="0", batch_size=BATCH_SIZE, enable_jit=False):
     '''
 
     :param model_fname: the filename where the keras model is saved
     :param gpuIds: the gpu id(s) to use. Comma separated string. Use -1 for cpu only
     :param batch_size:
+    :param enable_jit: Enable XLA compilation. This can improve sustained throughput but increases startup time
     '''
     gpuIds, nGpus = configureGpuEnvironment(gpuIds)
 
     batch_size= BATCH_SIZE if batch_size is None else batch_size
+    if batch_size < 1:
+      raise ValueError("batch_size must be at least 1")
+    self.batch_size_per_gpu = batch_size
     self.batch_size = batch_size*nGpus
     print("loading model %s ..."%model_fname, end=" ")
     self.model_fname= model_fname
-    self.model = load_model(model_fname, nGpus=nGpus )
+    self.model = load_model(model_fname, nGpus=nGpus, enable_jit=enable_jit)
     self.netInputSize= getInputCubeSize(self.model)
     chunkInfo=loadChunkConfigFromModel(model_fname)
     if chunkInfo is None:
@@ -36,6 +40,19 @@ class AutoProcessVol(object):
       self.nnet_input_stride= chunkInfo["NNET_INPUT_STRIDE"]
 
     print("DONE!")
+
+  def _predictOnBatch(self, batch_x):
+    from tensorflow.errors import ResourceExhaustedError
+
+    try:
+      return self.model.predict_on_batch(np.expand_dims(batch_x, axis=-1))
+    except ResourceExhaustedError as error:
+      suggested_batch_size = max(1, self.batch_size_per_gpu // 2)
+      raise RuntimeError(
+        "TensorFlow ran out of device memory with --batch_size %d. "
+        "Run DeepEMhancer again with a smaller value, for example --batch_size %d."
+        % (self.batch_size_per_gpu, suggested_batch_size)
+      ) from error
 
   def _updateMask(self, coords_list, batch_y_pred, mask, weights):
     for coord, mask_chunk in zip(coords_list, batch_y_pred):
@@ -187,7 +204,7 @@ class AutoProcessVol(object):
       n_cubes+=1
       if n_cubes==self.batch_size:
         batch_x= np.stack(batch_x)
-        batch_y_pred= self.model.predict_on_batch(np.expand_dims(batch_x, axis=-1))
+        batch_y_pred= self._predictOnBatch(batch_x)
 
         self._updateMask(coords_list, batch_y_pred, processVol, weights)
         batch_x, coords_list= [], []
@@ -196,7 +213,7 @@ class AutoProcessVol(object):
       batch_x = np.stack(batch_x)[:n_cubes,...]
       coords_list = coords_list[:n_cubes]
 
-      batch_y_pred = self.model.predict_on_batch(np.expand_dims(batch_x, axis=-1))
+      batch_y_pred = self._predictOnBatch(batch_x)
       self._updateMask(coords_list, batch_y_pred, processVol, weights)
 
     processVol= processVol/weights
@@ -340,6 +357,12 @@ if __name__=="__main__":
           "help": "Number of cubes to process simultaneously. Lower it if CUDA out of memory error happens. Default: %(default)s"
         }),
 
+        ("--enable_jit", {
+          "action": "store_true",
+          "default": False,
+          "help": "Enable XLA compilation for inference. This may improve sustained throughput after a long first-batch compilation"
+        }),
+
    ]
 
   processingType, args = parseProcessingType("apply neural network to do volume postprocessing", additonalArgs, skypFileOfIds=True)
@@ -354,6 +377,7 @@ if __name__=="__main__":
   if args.sampling_rate is not None:
     boxSize= args.sampling_rate
 
-  predictor= AutoProcessVol(checkpoint_fname, gpuIds= args.gpuId, batch_size= args.batch_size)
+  predictor= AutoProcessVol(checkpoint_fname, gpuIds=args.gpuId, batch_size=args.batch_size,
+                            enable_jit=args.enable_jit)
   predictor.predict(inputVolOrFname, args.output, binary_mask=args.binaryMask, noise_stats=args.noise_stats,
                     voxel_size=boxSize, apply_postprocess_cleaning=args.cleaningStrengh)

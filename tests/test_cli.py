@@ -28,6 +28,7 @@ class CommandLineTests(unittest.TestCase):
       text=True,
     )
     self.assertIn("DeepEMHancer. Deep post-processing", result.stdout)
+    self.assertIn("--enable_jit", result.stdout)
     self.assertNotIn("oneDNN custom operations", result.stderr)
     self.assertNotIn("absl::InitializeLog", result.stderr)
 

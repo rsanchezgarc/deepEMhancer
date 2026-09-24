@@ -9,7 +9,7 @@ from .config import DEFAULT_MODEL_DIR
 
 
 def main(inputMap, outputMap, processingType, halfMap2=None, samplingRate=None, noiseStats=None, binaryMask=None,
-         deepLearningModelPath=None, cleaningStrengh=-1, batch_size=None, gpuIds="0"):
+         deepLearningModelPath=None, cleaningStrengh=-1, batch_size=None, gpuIds="0", enable_jit=False):
   '''
 
   :param inputMap: The path containing an mrc file with the input map or a numpy array. A half map can also be provided
@@ -31,6 +31,7 @@ def main(inputMap, outputMap, processingType, halfMap2=None, samplingRate=None, 
   :param cleaningStrengh: Post-processing step to remove small connected components (Hide dust). Max relative size of connected components to remove 0<s<1 or -1 to deactivate.
   :param batch_size: Batch size used to feed the GPUs
   :param gpuIds: Comma separated gpu Ids
+  :param enable_jit: Enable XLA compilation for inference
 
   :return: prediction: a 3D numpy array
   '''
@@ -69,7 +70,7 @@ def main(inputMap, outputMap, processingType, halfMap2=None, samplingRate=None, 
   if samplingRate is not None:
     boxSize= samplingRate
 
-  predictor= AutoProcessVol(checkpoint_fname, gpuIds= gpuIds, batch_size= batch_size)
+  predictor= AutoProcessVol(checkpoint_fname, gpuIds=gpuIds, batch_size=batch_size, enable_jit=enable_jit)
 
   predVol= predictor.predict(inputVolOrFname, outputMap, binary_mask=binaryMask, noise_stats=noiseStats,
                     voxel_size=boxSize, apply_postprocess_cleaning=cleaningStrengh)

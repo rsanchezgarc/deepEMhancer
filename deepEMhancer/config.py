@@ -13,9 +13,6 @@ DEFAULT_MODEL_DIR = os.path.expanduser("~/.local/share/deepEMhancerModels/produc
 
 
 NNET_NJOBs= 8
-# A single 64^3 cube fits on low-memory GPUs. Users with more VRAM can raise
-# this with --batch_size for better throughput.
-BATCH_SIZE=1
+BATCH_SIZE=8
 
 MAX_VAL_AFTER_NORMALIZATION=200
-
