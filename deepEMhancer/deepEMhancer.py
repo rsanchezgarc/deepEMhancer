@@ -35,6 +35,9 @@ def main(inputMap, outputMap, processingType, halfMap2=None, samplingRate=None, 
   :return: prediction: a 3D numpy array
   '''
 
+  from .utils.gpuSelector import configureGpuEnvironment
+  gpuIds, __ = configureGpuEnvironment(gpuIds)
+
   import tensorflow as tf
   from .applyProcessVol.processVol import AutoProcessVol, resolveHalfMapsOrInputMap
 

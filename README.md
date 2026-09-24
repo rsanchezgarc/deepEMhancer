@@ -135,8 +135,9 @@ DeepEMhancer divides a map into cubes and sends batches of cubes to the selected
 memory is exhausted; increase it when GPU utilization is low and sufficient memory is available. For example, a
 reasonable starting point for an 8 GB GPU is `--batch_size 6`.
 
-Use `-g 0` for the first GPU, `-g 0,1` for multiple GPUs, or `-g -1` for CPU-only inference. Setting
-`TF_FORCE_GPU_ALLOW_GROWTH=true` can help TensorFlow avoid reserving all GPU memory at startup.
+Use `-g 0` for the first GPU, `-g 0,1` for multiple GPUs, `-g all` for every detected GPU, or `-g -1` for CPU-only
+inference. GPU indices are zero-based. Setting `TF_FORCE_GPU_ALLOW_GROWTH=true` can help TensorFlow avoid reserving
+all GPU memory at startup.
 
 ## Examples
 

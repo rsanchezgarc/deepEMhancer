@@ -12,6 +12,14 @@ class CommandLineTests(unittest.TestCase):
     )
     subprocess.run([sys.executable, "-c", command], check=True)
 
+  def test_importing_process_volume_does_not_import_tensorflow(self):
+    command = (
+      "import sys; "
+      "import deepEMhancer.applyProcessVol.processVol; "
+      "assert 'tensorflow' not in sys.modules"
+    )
+    subprocess.run([sys.executable, "-c", command], check=True)
+
   def test_help_does_not_initialize_tensorflow(self):
     result = subprocess.run(
       [sys.executable, "-m", "deepEMhancer.exeDeepEMhancer", "--help"],

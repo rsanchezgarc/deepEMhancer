@@ -1,7 +1,6 @@
 import os
 import tempfile
 from contextlib import contextmanager
-import tensorflow as tf
 import h5py
 from .ioUtils import loadVolIfFnameOrIgnoreIfMatrix
 
@@ -19,6 +18,9 @@ def _keras_compatible_model_path(checkpoint_fname):
 
 
 def load_model(checkpoint_fname, custom_objects=None, lastLayerToFreeze=None, resetWeights=False, nGpus=1):
+  # GPU visibility must be configured by the caller before TensorFlow is loaded.
+  import tensorflow as tf
+
   if custom_objects is None:
     __, codes = retrieveParamsFromHd5(checkpoint_fname,  [], ['code/custom_objects'])
     if codes is None:
