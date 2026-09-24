@@ -3,6 +3,7 @@ import tempfile
 import unittest
 
 from deepEMhancer.utils.loadModel import (
+    _disable_jit_compilation,
     _keras_compatible_model_path,
     getInputCubeSize,
 )
@@ -14,6 +15,10 @@ class _ModelWithShape:
 
 class _ModelWithMultipleInputs:
   input_shape = [(None, 48, 48, 48, 1), (None, 1)]
+
+
+class _JitCompiledModel:
+  jit_compile = True
 
 
 class LoadModelCompatibilityTests(unittest.TestCase):
@@ -36,6 +41,11 @@ class LoadModelCompatibilityTests(unittest.TestCase):
   def test_input_cube_size_uses_model_input_shape(self):
     self.assertEqual(getInputCubeSize(_ModelWithShape()), 64)
     self.assertEqual(getInputCubeSize(_ModelWithMultipleInputs()), 48)
+
+  def test_jit_compilation_is_disabled_for_inference(self):
+    model = _JitCompiledModel()
+    self.assertIs(_disable_jit_compilation(model), model)
+    self.assertFalse(model.jit_compile)
 
 
 if __name__ == "__main__":

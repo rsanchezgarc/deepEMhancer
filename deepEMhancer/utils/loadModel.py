@@ -17,6 +17,13 @@ def _keras_compatible_model_path(checkpoint_fname):
     yield checkpoint_fname
 
 
+def _disable_jit_compilation(model):
+  """Avoid the very long XLA compile on the first inference batch."""
+  if hasattr(model, "jit_compile"):
+    model.jit_compile = False
+  return model
+
+
 def load_model(checkpoint_fname, custom_objects=None, lastLayerToFreeze=None, resetWeights=False, nGpus=1):
   # GPU visibility must be configured by the caller before TensorFlow is loaded.
   import tensorflow as tf
@@ -45,7 +52,9 @@ def load_model(checkpoint_fname, custom_objects=None, lastLayerToFreeze=None, re
     with mirrored_strategy.scope():
       model = load_checkpoint()
   else:
-      model = load_checkpoint()
+    model = load_checkpoint()
+
+  _disable_jit_compilation(model)
 
   if lastLayerToFreeze is not None:
     layerFound= False
