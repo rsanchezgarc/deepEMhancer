@@ -29,9 +29,13 @@ install_requires = [
   'requests>=2.32,<3',
   'scikit-image>=0.24,<0.27',
   'scipy>=1.13,<1.18',
-  'tensorflow==2.21.*',
   'tqdm>=4.67,<5',
 ]
+
+if os.environ.get('DEEPEMHANCER_CPU_ONLY'):
+  install_requires.append('tensorflow==2.21.*')
+else:
+  install_requires.append('tensorflow[and-cuda]==2.21.*')
 
 setup(name='deepEMhancer',
       version=version(),
@@ -45,9 +49,6 @@ setup(name='deepEMhancer',
       license='Apache 2.0',
       packages=setuptools.find_packages(),
       install_requires=install_requires,
-      extras_require={
-        'gpu': ['tensorflow[and-cuda]==2.21.*'],
-      },
       python_requires='>=3.10,<3.14',
       dependency_links=[],
       entry_points={

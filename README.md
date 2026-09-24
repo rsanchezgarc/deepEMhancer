@@ -158,11 +158,11 @@ source ./deepEMhancer_env/bin/activate
 2) Install DeepEMhancer
 - For CPU-only use (expect long running times on full maps)
 ```
+DEEPEMHANCER_CPU_ONLY=1 python -m pip install .
+```
+- With GPU support (default)
+```
 python -m pip install .
-```
-- With GPU support
-```
-python -m pip install '.[gpu]'
 ```
   - Check if GPUs are successfully detected.
 ```
