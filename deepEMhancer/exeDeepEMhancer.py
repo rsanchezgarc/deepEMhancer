@@ -5,8 +5,6 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 
-from .applyProcessVol.processVol import AutoProcessVol, resolveHalfMapsOrInputMap
-
 from .config import DEFAULT_MODEL_DIR
 
 
@@ -38,6 +36,7 @@ def main(inputMap, outputMap, processingType, halfMap2=None, samplingRate=None, 
   '''
 
   import tensorflow as tf
+  from .applyProcessVol.processVol import AutoProcessVol, resolveHalfMapsOrInputMap
 
   tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
