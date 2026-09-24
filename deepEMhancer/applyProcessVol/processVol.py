@@ -11,12 +11,13 @@ from ..utils.loadModel import load_model, getInputCubeSize, loadNormalizationFun
 from .utilsPostprocess import removeSmallCCs, morphologicalDilation
 
 class AutoProcessVol(object):
-  def __init__(self, model_fname, gpuIds="0", batch_size=BATCH_SIZE):
+  def __init__(self, model_fname, gpuIds="0", batch_size=BATCH_SIZE, enable_jit=False):
     '''
 
     :param model_fname: the filename where the keras model is saved
     :param gpuIds: the gpu id(s) to use. Comma separated string. Use -1 for cpu only
     :param batch_size:
+    :param enable_jit: Enable XLA compilation. This can improve sustained throughput but increases startup time
     '''
     gpuIds, nGpus = configureGpuEnvironment(gpuIds)
 
@@ -27,7 +28,7 @@ class AutoProcessVol(object):
     self.batch_size = batch_size*nGpus
     print("loading model %s ..."%model_fname, end=" ")
     self.model_fname= model_fname
-    self.model = load_model(model_fname, nGpus=nGpus )
+    self.model = load_model(model_fname, nGpus=nGpus, enable_jit=enable_jit)
     self.netInputSize= getInputCubeSize(self.model)
     chunkInfo=loadChunkConfigFromModel(model_fname)
     if chunkInfo is None:
@@ -356,6 +357,12 @@ if __name__=="__main__":
           "help": "Number of cubes to process simultaneously. Lower it if CUDA out of memory error happens. Default: %(default)s"
         }),
 
+        ("--enable_jit", {
+          "action": "store_true",
+          "default": False,
+          "help": "Enable XLA compilation for inference. This may improve sustained throughput after a long first-batch compilation"
+        }),
+
    ]
 
   processingType, args = parseProcessingType("apply neural network to do volume postprocessing", additonalArgs, skypFileOfIds=True)
@@ -370,6 +377,7 @@ if __name__=="__main__":
   if args.sampling_rate is not None:
     boxSize= args.sampling_rate
 
-  predictor= AutoProcessVol(checkpoint_fname, gpuIds= args.gpuId, batch_size= args.batch_size)
+  predictor= AutoProcessVol(checkpoint_fname, gpuIds=args.gpuId, batch_size=args.batch_size,
+                            enable_jit=args.enable_jit)
   predictor.predict(inputVolOrFname, args.output, binary_mask=args.binaryMask, noise_stats=args.noise_stats,
                     voxel_size=boxSize, apply_postprocess_cleaning=args.cleaningStrengh)

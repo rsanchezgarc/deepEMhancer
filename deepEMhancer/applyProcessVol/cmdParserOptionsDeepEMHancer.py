@@ -92,6 +92,12 @@ processVolOptions= [
       "help": "Number of cubes processed simultaneously. Reduce it after a GPU out-of-memory error. Default: %(default)s"
      }),
 
+     ("--enable_jit", {
+       "action": "store_true",
+       "default": False,
+       "help": "Enable XLA compilation for inference. This may improve sustained throughput after a long first-batch compilation"
+     }),
+
     ("--version", {
         "action": "version",
         "version": deepEMhancer.__version__,

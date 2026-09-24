@@ -17,14 +17,15 @@ def _keras_compatible_model_path(checkpoint_fname):
     yield checkpoint_fname
 
 
-def _disable_jit_compilation(model):
-  """Avoid the very long XLA compile on the first inference batch."""
+def _configure_jit_compilation(model, enable_jit=False):
+  """Configure opt-in XLA compilation for inference."""
   if hasattr(model, "jit_compile"):
-    model.jit_compile = False
+    model.jit_compile = enable_jit
   return model
 
 
-def load_model(checkpoint_fname, custom_objects=None, lastLayerToFreeze=None, resetWeights=False, nGpus=1):
+def load_model(checkpoint_fname, custom_objects=None, lastLayerToFreeze=None, resetWeights=False, nGpus=1,
+               enable_jit=False):
   # GPU visibility must be configured by the caller before TensorFlow is loaded.
   import tensorflow as tf
 
@@ -54,7 +55,7 @@ def load_model(checkpoint_fname, custom_objects=None, lastLayerToFreeze=None, re
   else:
     model = load_checkpoint()
 
-  _disable_jit_compilation(model)
+  _configure_jit_compilation(model, enable_jit)
 
   if lastLayerToFreeze is not None:
     layerFound= False
