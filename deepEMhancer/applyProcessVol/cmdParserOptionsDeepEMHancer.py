@@ -10,8 +10,8 @@ processVolOptions= [
       "type": str,
       "nargs": None,
       "required": True,
-      "help": "Input map to process or half map number 1. This map should be unmasked and not sharpened (Do not use post-processed maps, only maps directly obtained from refinement)" +
-      ". If half map 1 used, do not forget to also provide the half map 2 using -i2"}),
+      "help": "Input map to process or half-map 1. Prefer an unmasked, unsharpened map obtained directly from refinement. "
+              "When providing half-map 1, also provide half-map 2 with -i2"}),
 
   ("-o", "--outputMap", {
       "type": str,
@@ -22,15 +22,15 @@ processVolOptions= [
     ("-p", "--processingType", {
       "choices": ['wideTarget', 'tightTarget', 'highRes'],
       "default": 'tightTarget',
-      "help": "Select the deep learning model you want to use. WideTarget will produce less sharp results than tightTarget. HighRes is only recommended for overal FSC resolution < 4 A\n"
-              "This option is igonred if normalization mode 2 is selected"}),
+      "help": "Select the deep-learning model. wideTarget generally produces less sharp results than tightTarget. "
+              "highRes is recommended only for overall FSC resolution better than 4 A. Keep the default when using --binaryMask"}),
 
     ("-i2", "--halfMap2", {
       "type": str,
       "nargs": None,
       "required": False,
       "default": None,
-      "help": "(Optional) Input half map 2 to process"}),
+      "help": "(Optional) Half-map 2 to process"}),
 
     ("-s", "--samplingRate", {
       "type": float,
@@ -45,16 +45,15 @@ processVolOptions= [
        "type": float,
        "nargs": 2, "metavar": ("NOISE_MEAN", "NOISE_STD"),
        "required": False,
-       "help": "(Optional) Normalization mode 1: The statisitcs of the noise to normalize (mean and standard deviation) the input. Preferred over binaryMask but ignored if "
-               "binaryMask provided. If not --noiseStats nor --binaryMask provided, nomralization params will be automatically estimated, although, in some rare cases, estimation may fail or be "
-               "less accurate"}),
+       "help": "(Optional) Noise mean and standard deviation used to normalize the input. If neither --noiseStats nor "
+               "--binaryMask is provided, these values are estimated automatically"}),
 
      ("-m", "--binaryMask", {
        "type": str,
        "nargs": None,
        "required": False,
-       "help": "(Optional) Normalization mode 2: A binaryMask (1 protein, 0 no protein) used to normalize the input. If no normalization mode "
-               "provided, automatic normalization will be carried out. Supresses --precomputedModel option"}),
+       "help": "(Optional) Binary mask (1 for protein, 0 for background) used to normalize the input. This selects the "
+               "model designed for masked inputs"}),
 
      ("parser_group", "Alternative options"),
 
@@ -62,7 +61,7 @@ processVolOptions= [
        "type": str,
        "required": False, "nargs": None,
        "default": None, "metavar": "PATH_TO_MODELS_DIR",
-       "help": "(Optional) Directory where a non default deep learning model is located (model is selected using --precomputedModel) or a path to hd5 file containing the model"
+       "help": "(Optional) Directory containing the DeepEMhancer models, or a path to a specific .hd5 model file"
      }),
 
 
@@ -78,19 +77,19 @@ processVolOptions= [
 
      ("-g", "--gpuIds", {
        "type": str,
-       "nargs": None,
-       "required": False,
-       "default": "0",
-       "help": "The gpu(s) where the program will be executed. If more that 1, comma seppared. E.g -g 1,2,3. Set to -1 to use only cpu (very slow). Default: %(default)s"
+      "nargs": None,
+      "required": False,
+      "default": "0",
+      "help": "Comma-separated GPU IDs, for example -g 0,1. Set to -1 for CPU-only inference. Default: %(default)s"
 
      }),
 
      ("-b", "--batch_size", {
        "type": int,
-       "nargs": None,
-       "required": False,
-       "default": BATCH_SIZE,
-       "help": "Number of cubes to process simultaneously. Lower it if CUDA Out Of Memory error happens and increase it if low GPU performance observed. Warning, for some inputs it may crash if --gpus > . Use only 1 gpus in that case. 1Default: %(default)s"
+      "nargs": None,
+      "required": False,
+      "default": BATCH_SIZE,
+      "help": "Number of cubes processed simultaneously. Reduce it after a GPU out-of-memory error. Default: %(default)s"
      }),
 
     ("--version", {

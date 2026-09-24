@@ -5,7 +5,7 @@ from tqdm import tqdm
 
 from ..config import RESIZE_VOL_TO, BATCH_SIZE
 from ..utils.dataUtils import getNewShapeForResize, resizeVol
-from ..utils.gpuSelector import mask_CUDA_VISIBLE_DEVICES, resolveDesiredGpus
+from ..utils.gpuSelector import configureGpuEnvironment
 from ..utils.ioUtils import saveVol, loadVolIfFnameOrIgnoreIfMatrix
 from ..utils.loadModel import load_model, getInputCubeSize, loadNormalizationFunFromModel, loadChunkConfigFromModel
 from .utilsPostprocess import removeSmallCCs, morphologicalDilation
@@ -18,11 +18,7 @@ class AutoProcessVol(object):
     :param gpuIds: the gpu id(s) to use. Comma separated string. Use -1 for cpu only
     :param batch_size:
     '''
-    if isinstance(gpuIds, str):
-      gpuIds, nGpus=resolveDesiredGpus(gpuIds)
-    else:
-      nGpus=1
-    mask_CUDA_VISIBLE_DEVICES(gpuIds)
+    gpuIds, nGpus = configureGpuEnvironment(gpuIds)
 
     batch_size= BATCH_SIZE if batch_size is None else batch_size
     self.batch_size = batch_size*nGpus
@@ -329,7 +325,7 @@ if __name__=="__main__":
          "nargs": None,
          "required": False,
          "default": "0",
-         "help": "The gpu(s) where the program will be executed. If more that 1, comma seppared. E.g -g 1,2,3 . Default: %(default)s"
+         "help": "Comma-separated GPU IDs, for example -g 0,1. Set to -1 for CPU-only inference. Default: %(default)s"
 
       }),
 
@@ -358,5 +354,3 @@ if __name__=="__main__":
   predictor= AutoProcessVol(checkpoint_fname, gpuIds= args.gpuId, batch_size= args.batch_size)
   predictor.predict(inputVolOrFname, args.output, binary_mask=args.binaryMask, noise_stats=args.noise_stats,
                     voxel_size=boxSize, apply_postprocess_cleaning=args.cleaningStrengh)
-
-
