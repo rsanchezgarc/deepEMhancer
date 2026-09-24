@@ -1,5 +1,5 @@
 {% set name = "deepEMhancer" %}
-{% set version = "0.16" %}
+{% set version = "0.17" %}
 
 package:
   name: "{{ name|lower }}"
@@ -17,34 +17,20 @@ build:
   script: "{{ PYTHON }} -m pip install . -vv --no-deps && echo 'DONE' "
 
 requirements:
-  build:
-    - numpy ==1.23.*
+  host:
     - setuptools
-    - joblib ==1.2.*
-    - mrcfile ==1.4.*
     - pip
-    - python ==3.10.*
-    - requests ==2.28.*
-    - scikit-image ==0.19.*
-    - scipy ==1.9.*
-    - tensorflow-gpu ==2.12.*
-    - tqdm ==4.64
-    - h5py * nompi*
-    - flatbuffers
+    - python >=3.10,<3.14
   run:
-    - numpy ==1.23.*
-    - setuptools
-    - joblib ==1.2.*
-    - mrcfile ==1.4.*
-    - pip
-    - python ==3.10.*
-    - requests ==2.28.*
-    - scikit-image ==0.19.*
-    - scipy ==1.9.*
-    - tensorflow-gpu ==2.12.*
-    - tqdm ==4.64
-    - h5py * nompi*
-    - flatbuffers     
+    - h5py >=3.11,<3.15
+    - mrcfile >=1.5,<1.6
+    - numpy >=1.26,<2.3
+    - python >=3.10,<3.14
+    - requests >=2.32,<3
+    - scikit-image >=0.24,<0.27
+    - scipy >=1.13,<1.18
+    - tensorflow >=2.21,<2.22
+    - tqdm >=4.67,<5
 test:
   imports:
     - deepEMhancer

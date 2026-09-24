@@ -1,7 +1,21 @@
 import os
+import tempfile
+from contextlib import contextmanager
 import tensorflow as tf
 import h5py
 from .ioUtils import loadVolIfFnameOrIgnoreIfMatrix
+
+
+@contextmanager
+def _keras_compatible_model_path(checkpoint_fname):
+  """Expose legacy ``.hd5`` checkpoints with an extension Keras 3 accepts."""
+  if checkpoint_fname.lower().endswith(".hd5"):
+    with tempfile.TemporaryDirectory(prefix="deepemhancer-model-") as tmp_dir:
+      compatible_path = os.path.join(tmp_dir, "checkpoint.h5")
+      os.symlink(os.path.abspath(checkpoint_fname), compatible_path)
+      yield compatible_path
+  else:
+    yield checkpoint_fname
 
 
 def load_model(checkpoint_fname, custom_objects=None, lastLayerToFreeze=None, resetWeights=False, nGpus=1):
@@ -15,18 +29,21 @@ def load_model(checkpoint_fname, custom_objects=None, lastLayerToFreeze=None, re
       custom_objects= codes["custom_objects"]
 
 
-  if int(tf.__version__.split(".")[0]) > 1:
-    from tensorflow.keras.models import load_model
-  else:
-      from keras.models import load_model
+  from tensorflow.keras.models import load_model as keras_load_model
+
+  def load_checkpoint():
+    # These checkpoints are used for inference only. Avoid deserializing their
+    # old optimizer/loss configuration, which is not portable to Keras 3.
+    with _keras_compatible_model_path(checkpoint_fname) as compatible_path:
+      return keras_load_model(compatible_path, custom_objects=custom_objects, compile=False)
       
   if nGpus>1:
     devices_names = list(map(lambda x:":".join( x.name.split(":")[-2:]), tf.config.list_physical_devices('GPU')))
     mirrored_strategy = tf.distribute.MirroredStrategy(devices= devices_names )
     with mirrored_strategy.scope():
-      model = load_model(checkpoint_fname, custom_objects=custom_objects )
+      model = load_checkpoint()
   else:
-      model = load_model(checkpoint_fname, custom_objects=custom_objects )
+      model = load_checkpoint()
 
   if lastLayerToFreeze is not None:
     layerFound= False
@@ -51,10 +68,10 @@ def load_model(checkpoint_fname, custom_objects=None, lastLayerToFreeze=None, re
 
 
 def getInputCubeSize(model):
-  try:
-    return model.layers[0].output_shape[0][1]
-  except TypeError:
-    return model.layers[0].output_shape[1]
+  input_shape = model.input_shape
+  if isinstance(input_shape, list):
+    input_shape = input_shape[0]
+  return input_shape[1]
 
 
 def retrieveParamsFromHd5(fname, paramsList, codeList):
