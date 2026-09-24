@@ -87,19 +87,19 @@ class AutoProcessVol(object):
     i_range= range(0, vol_shape[0] - (chunk_size - 1), stride)
     j_range= range(0, vol_shape[1] - (chunk_size - 1), stride)
     k_range= range(0, vol_shape[2] - (chunk_size - 1), stride)
-    progressBar= tqdm(total=len(i_range)*len(j_range))
+    progressBar= tqdm(total=len(i_range)*len(j_range)*len(k_range), desc="Cubes")
     count = 0
     for i in i_range:
       for j in j_range:
         for k in k_range:
           if binary_mask is not None:
             if np.count_nonzero(binary_mask[i:i + chunk_size, j:j + chunk_size, k:k + chunk_size])==0:
+              progressBar.update()
               continue
           cubeX = vol[i:i + chunk_size, j:j + chunk_size, k:k + chunk_size]
           yield cubeX, (i, j, k)
           count += 1
-        progressBar.update()
-        progressBar.refresh()
+          progressBar.update()
         while count % self.batch_size != 0:
             yield cubeX, None
             count += 1
@@ -147,6 +147,7 @@ class AutoProcessVol(object):
     assert apply_postprocess_cleaning<1, "Error, required 0<apply_postprocess_cleaning<1  or apply_postprocess_cleaning=-1. Provided %s"%(apply_postprocess_cleaning)
     assert  not (noise_stats is not None and binary_mask is not None), "Error, only one of the following options can be provided: noise_stats, binary_mask "
     inputNormFun, binary_mask = self._getNormalizationFunction(binary_mask, noise_stats)
+    print("Loading and normalizing input volume...")
     vol, boxSize= loadVolIfFnameOrIgnoreIfMatrix(vol_fname_or_matrix, normalize=inputNormFun)
 
     if boxSize is None:
@@ -247,9 +248,11 @@ def resolveHalfMapsOrInputMap(inputVol, halfMap2):
     inputVolOrFname= inputVol
     boxSize=None
   else:
+    print("Loading and averaging half maps...")
     half1Vol, boxSize= loadVolIfFnameOrIgnoreIfMatrix(inputVol, normalize=None)
     half2Vol, __= loadVolIfFnameOrIgnoreIfMatrix(halfMap2, normalize=None)
     inputVolOrFname= 0.5*(half1Vol+half2Vol)
+    print("Half maps loaded.")
   return inputVolOrFname, boxSize
 
 if __name__=="__main__":
