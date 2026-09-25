@@ -91,6 +91,12 @@ The command should print at least one `PhysicalDevice` with `device_type='GPU'`.
 check the NVIDIA driver and reinstall in a clean environment; do not mix the bundled runtime with separately
 installed CUDA or cuDNN packages.
 
+
+DeepEMhancer can also be installed and used through [SBGrid](https://sbgrid.org/), which provides access to a collection of structural biology software.
+This option requires [joining SBGrid](https://sbgrid.org/join). If you are already a member of SBGrid, install it with the following command: 
+`sbgrid-cli install deepemhancer`. Visit the [DeepEMhancer page on SBGrid](https://sbgrid.org/software/titles/deepemhancer) for more information.
+
+
 ## Usage guide
 
 ### Input maps
